@@ -5,6 +5,9 @@ import os
 from typing import List
 from pydantic_settings import BaseSettings
 from functools import lru_cache
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path="../.env")
 
 
 class Settings(BaseSettings):
@@ -17,14 +20,21 @@ class Settings(BaseSettings):
     PORT: int = 8000
     
     # MongoDB
-    MONGODB_URI: str = "mongodb://localhost:27017"
-    MONGODB_DB_NAME: str = "coursecompanion"
+    MONGODB_URI: str = os.getenv("MONGODB_URI")
+    MONGODB_DB_NAME: str = os.getenv("MONGODB_DB_NAME")
     
     # OpenAI
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4"
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
-    
+
+    # Azure OpenAI
+    AZURE_OPENAI_API_KEY: str = os.getenv("AZURE_OPENAI_API_KEY")
+    AZURE_OPENAI_ENDPOINT: str = os.getenv("AZURE_OPENAI_ENDPOINT")
+    AZURE_OPENAI_DEPLOYMENT_NAME: str = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
+    AZURE_OPENAI_CHAT_DEPLOYMENT: str = os.getenv("AZURE_OPENAI_CHAT_DEPLOYMENT")
+    AZURE_OPENAI_API_VERSION: str = os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01")
+
     # CORS
     CORS_ORIGINS: List[str] = [
         "http://localhost:8501",  # Streamlit default
@@ -34,8 +44,8 @@ class Settings(BaseSettings):
     ]
     
     # Vector Search
-    VECTOR_INDEX_NAME: str = "course_content_index"
-    EMBEDDING_DIMENSIONS: int = 1536
+    VECTOR_INDEX_NAME: str = os.getenv("VECTOR_INDEX_NAME")
+    EMBEDDING_DIMENSIONS: int = int(os.getenv("EMBEDDING_DIMENSIONS"))
     
     # RAG Settings
     RAG_CHUNK_SIZE: int = 1000
