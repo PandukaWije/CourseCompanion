@@ -23,8 +23,8 @@ async def connect_to_mongo():
     """
     global _client, _database
     
-    mongodb_uri = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-    db_name = os.getenv("MONGODB_DB_NAME", "coursecompanion")
+    mongodb_uri = os.getenv("MONGODB_URI")
+    db_name = os.getenv("MONGODB_DB_NAME")
     
     try:
         _client = AsyncIOMotorClient(mongodb_uri)
