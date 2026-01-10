@@ -1,172 +1,189 @@
 {
   "courses": [
     {
-      "course_id": "xm-cloud-101",
-      "title": "XM Cloud Fundamentals",
-      "description": "Learn the basics of XM Cloud architecture and implementation. This comprehensive course covers everything from setting up your development environment to deploying your first XM Cloud application.",
+      "course_id": "cpp-fundamentals-101",
+      "title": "C++ Fundamentals",
+      "description": "Complete C++ programming course from basics to advanced concepts",
+      "difficulty": "Beginner",
+      "duration": "6 hours",
+      "modules": [
+        {
+          "id": 1,
+          "title": "Introduction to C++",
+          "duration": "30 min",
+          "type": "video"
+        },
+        {
+          "id": 2,
+          "title": "Variables and Data Types",
+          "duration": "45 min",
+          "type": "video"
+        },
+        {
+          "id": 3,
+          "title": "Control Structures",
+          "duration": "40 min",
+          "type": "video"
+        },
+        {
+          "id": 4,
+          "title": "Functions and Classes",
+          "duration": "50 min",
+          "type": "video"
+        },
+        {
+          "id": 5,
+          "title": "Object-Oriented Programming",
+          "duration": "60 min",
+          "type": "video"
+        }
+      ],
+      "prerequisites": [],
+      "topics": [
+        "programming",
+        "cpp",
+        "object-oriented",
+        "fundamentals"
+      ],
+      "keywords": [
+        "c++",
+        "programming",
+        "oop",
+        "syntax",
+        "data structures"
+      ],
+      "roles": [
+        "developer",
+        "student"
+      ],
+      "learning_outcomes": [
+        "Understand C++ syntax and programming fundamentals",
+        "Write object-oriented programs using classes and inheritance",
+        "Implement data structures and algorithms in C++",
+        "Debug and optimize C++ code effectively"
+      ]
+    },
+    {
+      "course_id": "kubernetes-fundamentals-101",
+      "title": "Kubernetes Fundamentals",
+      "description": "Learn container orchestration with Kubernetes from scratch",
+      "difficulty": "Intermediate",
+      "duration": "5 hours",
+      "modules": [
+        {
+          "id": 1,
+          "title": "Kubernetes Overview",
+          "duration": "25 min",
+          "type": "video"
+        },
+        {
+          "id": 2,
+          "title": "Pods and Deployments",
+          "duration": "40 min",
+          "type": "video"
+        },
+        {
+          "id": 3,
+          "title": "Services and Networking",
+          "duration": "35 min",
+          "type": "video"
+        },
+        {
+          "id": 4,
+          "title": "ConfigMaps and Secrets",
+          "duration": "30 min",
+          "type": "video"
+        },
+        {
+          "id": 5,
+          "title": "Production Best Practices",
+          "duration": "45 min",
+          "type": "video"
+        }
+      ],
+      "prerequisites": [],
+      "topics": [
+        "kubernetes",
+        "containers",
+        "devops",
+        "orchestration"
+      ],
+      "keywords": [
+        "kubernetes",
+        "k8s",
+        "docker",
+        "containers",
+        "deployment"
+      ],
+      "roles": [
+        "developer",
+        "student"
+      ],
+      "learning_outcomes": [
+        "Understand Kubernetes architecture and components",
+        "Deploy and manage containerized applications",
+        "Configure networking and service discovery",
+        "Implement best practices for production deployments"
+      ]
+    },
+    {
+      "course_id": "c-programming-101",
+      "title": "C Programming Fundamentals",
+      "description": "Master C programming language fundamentals and best practices",
       "difficulty": "Beginner",
       "duration": "4 hours",
       "modules": [
         {
           "id": 1,
-          "title": "Introduction to XM Cloud",
-          "duration": "15 min",
-          "type": "video",
-          "description": "Overview of XM Cloud and its place in the Sitecore ecosystem"
+          "title": "Introduction to C",
+          "duration": "20 min",
+          "type": "video"
         },
         {
           "id": 2,
-          "title": "Architecture Overview",
-          "duration": "20 min",
-          "type": "video",
-          "description": "Understanding the headless architecture and component structure"
+          "title": "Basic Syntax and Structure",
+          "duration": "35 min",
+          "type": "video"
         },
         {
           "id": 3,
-          "title": "Setting Up Your Environment",
-          "duration": "25 min",
-          "type": "video",
-          "description": "Development environment setup and tooling"
+          "title": "Pointers and Memory",
+          "duration": "45 min",
+          "type": "video"
         },
         {
           "id": 4,
-          "title": "Component Development",
-          "duration": "30 min",
-          "type": "video",
-          "description": "Building components with JSS and Next.js"
-        },
-        {
-          "id": 5,
-          "title": "Deployment & Publishing",
-          "duration": "20 min",
-          "type": "video",
-          "description": "Deploying to XM Cloud and publishing content"
+          "title": "Data Structures in C",
+          "duration": "40 min",
+          "type": "video"
         }
       ],
       "prerequisites": [],
-      "topics": ["architecture", "development", "deployment", "fundamentals"],
-      "keywords": ["headless", "cms", "react", "nextjs", "jss", "saas", "cloud"],
-      "roles": ["developer", "architect"],
-      "learning_outcomes": [
-        "Understand XM Cloud architecture",
-        "Set up a development environment",
-        "Build components using JSS",
-        "Deploy applications to XM Cloud"
-      ]
-    },
-    {
-      "course_id": "search-fundamentals",
-      "title": "Sitecore Search Fundamentals",
-      "description": "Master Sitecore Search configuration and optimization. Learn how to implement powerful search experiences that help users discover content efficiently.",
-      "difficulty": "Intermediate",
-      "duration": "3 hours",
-      "modules": [
-        {
-          "id": 1,
-          "title": "Search Architecture",
-          "duration": "20 min",
-          "type": "video",
-          "description": "Understanding search infrastructure and components"
-        },
-        {
-          "id": 2,
-          "title": "Indexing Strategies",
-          "duration": "25 min",
-          "type": "video",
-          "description": "Content indexing and crawling configuration"
-        },
-        {
-          "id": 3,
-          "title": "Query Optimization",
-          "duration": "20 min",
-          "type": "video",
-          "description": "Boosting, relevance tuning, and performance"
-        },
-        {
-          "id": 4,
-          "title": "Faceted Search",
-          "duration": "15 min",
-          "type": "video",
-          "description": "Implementing facets and filters for better UX"
-        }
+      "topics": [
+        "programming",
+        "c-language",
+        "systems-programming",
+        "fundamentals"
       ],
-      "prerequisites": ["xm-cloud-101"],
-      "topics": ["indexing", "facets", "optimization", "architecture"],
-      "keywords": ["search", "indexing", "facets", "relevance", "performance", "discovery"],
-      "roles": ["developer", "architect", "admin"],
-      "learning_outcomes": [
-        "Configure search indexes",
-        "Implement faceted search",
-        "Optimize search relevance",
-        "Monitor search performance"
-      ]
-    },
-    {
-      "course_id": "content-hub-101",
-      "title": "Content Hub Basics",
-      "description": "Introduction to Sitecore Content Hub DAM and CMP. Learn how to manage digital assets, create content workflows, and integrate with other systems.",
-      "difficulty": "Beginner",
-      "duration": "5 hours",
-      "modules": [
-        {
-          "id": 1,
-          "title": "Content Hub Overview",
-          "duration": "15 min",
-          "type": "video",
-          "description": "Introduction to the Content Hub platform"
-        },
-        {
-          "id": 2,
-          "title": "Asset Management",
-          "duration": "25 min",
-          "type": "video",
-          "description": "Working with the Digital Asset Management features"
-        },
-        {
-          "id": 3,
-          "title": "Content Operations",
-          "duration": "20 min",
-          "type": "video",
-          "description": "Content Marketing Platform capabilities"
-        },
-        {
-          "id": 4,
-          "title": "Integration Patterns",
-          "duration": "30 min",
-          "type": "video",
-          "description": "API integration and connector setup"
-        },
-        {
-          "id": 5,
-          "title": "Workflows & Approvals",
-          "duration": "20 min",
-          "type": "video",
-          "description": "Building automated content workflows"
-        },
-        {
-          "id": 6,
-          "title": "Reporting & Analytics",
-          "duration": "15 min",
-          "type": "video",
-          "description": "Measuring content performance"
-        }
+      "keywords": [
+        "c",
+        "programming",
+        "systems",
+        "pointers",
+        "memory management"
       ],
-      "prerequisites": [],
-      "topics": ["dam", "cmp", "workflows", "integration"],
-      "keywords": ["content", "dam", "assets", "workflow", "marketing", "digital", "media"],
-      "roles": ["marketer", "content author", "admin"],
+      "roles": [
+        "developer",
+        "student"
+      ],
       "learning_outcomes": [
-        "Manage digital assets effectively",
-        "Create content approval workflows",
-        "Set up integrations",
-        "Generate content reports"
+        "Master C programming language fundamentals",
+        "Work with pointers and memory management",
+        "Implement data structures in C",
+        "Write efficient systems-level code"
       ]
     }
   ],
-  "metadata": {
-    "version": "1.0",
-    "last_updated": "2024-01-15",
-    "total_courses": 3
-  }
+  "generated_at": "2026-01-10T08:49:24.949899",
+  "total_courses": 3
 }
-
