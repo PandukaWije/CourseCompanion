@@ -1,0 +1,92 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.python-version
+
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ==================== DATA FILES ====================
+
+# Raw data files (too large for git)
+data/raw/pdfs/*.pdf
+data/raw/videos/*.mp4
+data/raw/videos/*.avi
+data/raw/videos/*.mov
+data/raw/documents/*.docx
+data/raw/documents/*.doc
+data/ui-designs/
+
+# Vector embeddings (generated, can be recreated)
+*.vector
+*.faiss
+*.pkl
+
+# Large artifacts
+data/artifacts/**/*.mp4
+data/artifacts/**/*.avi
+
+# ==================== KEEP THESE ====================
+# Keep the processed JSON files (small, essential)
+!data/courses/**/*.json
+!data/quizzes/**/*.json
+!data/artifacts/**/*.json
+
+# Keep directory structure
+!data/raw/.gitkeep
+!data/raw/pdfs/.gitkeep
+!data/raw/videos/.gitkeep
+!data/raw/documents/.gitkeep
+
+# MongoDB dumps (if you create them)
+*.bson
+dump/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
