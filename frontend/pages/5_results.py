@@ -6,8 +6,14 @@ import sys
 sys.path.append("..")
 
 from utils.api_client import APIClient
+from utils.css_loader import load_css
+from components.sidebar import render_app_sidebar
+
 
 st.set_page_config(page_title="Results - CourseCompanion", page_icon="📊", layout="wide")
+
+# Load CSS
+load_css()
 
 def check_results():
     """Check if there are quiz results to display"""

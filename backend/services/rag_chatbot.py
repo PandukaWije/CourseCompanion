@@ -132,10 +132,11 @@ class RAGChatbot:
             ])
             
             # Create system prompt
-            system_prompt = f"""You are a helpful learning assistant for a programming course.
+            system_prompt = f"""You are a helpful learning assistant for a course.
 Use the following context from the course materials to answer the student's question.
 Always be clear, educational, and provide examples when helpful.
 If the context doesn't contain the answer, say so politely and suggest what you can help with.
+If the question is unrelated to the course, respond that you can only assist with course-related queries.
 
 Context from course materials:
 {context_text}
@@ -190,6 +191,10 @@ I'm here to help with your learning! 📚"""
         try:
             # Search knowledge base (vector search with keyword fallback)
             relevant_chunks = await self._search_knowledge_base_with_vector(message)
+
+            logging_info = f"Found {len(relevant_chunks)} relevant chunks for course {self.course_id}"
+            # print(logging_info)
+            # print("relevant_chunks:", relevant_chunks)
             
             # Generate response
             response_text = self._generate_response(message, relevant_chunks)

@@ -1,4 +1,5 @@
-/* CourseCompanion - Custom Styles */
+/* CourseCompanion - Complete Styles */
+/* Combines app.py sidebar styling + learning page dark theme */
 
 /* ===== Color Variables ===== */
 :root {
@@ -18,12 +19,14 @@
 
 /* ===== Global Styles ===== */
 .stApp {
+    background: #1a1a1a;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ===== Sidebar Styles ===== */
+/* ===== Sidebar Styles (Beautiful Gradient from app.py) ===== */
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, var(--background-dark) 0%, #312e81 100%);
+    border-right: 2px solid #2a2a2a;
 }
 
 [data-testid="stSidebar"] .stMarkdown {
@@ -36,14 +39,40 @@
     color: white !important;
 }
 
+[data-testid="stSidebar"] * {
+    color: #e2e8f0;
+}
+
+/* ===== Main Container ===== */
+.main .block-container {
+    padding: 1rem !important;
+    max-width: 100% !important;
+}
+
+/* ===== Headers ===== */
+h1, h2, h3, h4, h5, h6 {
+    color: #E0E0E0 !important;
+}
+
+/* ===== Text ===== */
+p, span, div, label {
+    color: #E0E0E0;
+}
+
 /* ===== Button Styles ===== */
 .stButton > button {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
     border-radius: 8px;
+    padding: 0.5rem 1rem;
     font-weight: 500;
     transition: all 0.2s ease;
 }
 
 .stButton > button:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #764ba2;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
@@ -51,102 +80,126 @@
 .stButton > button[kind="primary"] {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     border: none;
-}
-
-/* ===== Card-like Containers ===== */
-.stExpander {
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    overflow: hidden;
+    color: white;
 }
 
 /* ===== Chat Message Styles ===== */
-[data-testid="stChatMessage"] {
+.stChatMessage {
+    background: transparent !important;
+    padding: 1rem !important;
+    margin: 0.5rem 0;
     border-radius: 12px;
-    margin-bottom: 12px;
 }
 
-[data-testid="stChatMessage"][data-testid*="user"] {
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+.stChatMessage[data-testid="user-message"] {
+    background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%) !important;
+    border-left: 4px solid #667eea;
+    border-radius: 8px;
 }
 
-[data-testid="stChatMessage"][data-testid*="assistant"] {
-    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+.stChatMessage[data-testid="assistant-message"] {
+    background: #2a2a2a !important;
+    border-left: 4px solid #4CAF50;
+    border-radius: 8px;
+}
+
+/* ===== Chat Input ===== */
+.stChatInputContainer {
+    border-top: 2px solid #2a2a2a;
+    background: #1E1E1E;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
 /* ===== Tab Styles ===== */
 .stTabs [data-baseweb="tab-list"] {
     gap: 8px;
+    background: transparent;
+    padding-bottom: 10px;
 }
 
 .stTabs [data-baseweb="tab"] {
-    border-radius: 8px 8px 0 0;
-    padding: 12px 24px;
+    background: #2a2a2a;
+    border-radius: 8px;
+    color: #999;
+    padding: 10px 20px;
+    border: 1px solid #3a3a3a;
     font-weight: 500;
 }
 
 .stTabs [aria-selected="true"] {
-    background: var(--primary-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    border-color: #764ba2;
 }
 
 /* ===== Progress Bar ===== */
-.stProgress > div > div {
+.stProgress > div > div > div {
     background: linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 100%);
     border-radius: 4px;
 }
 
 /* ===== Metric Cards ===== */
 [data-testid="stMetric"] {
-    background: white;
+    background: #2a2a2a;
     padding: 16px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #3a3a3a;
 }
 
 [data-testid="stMetricLabel"] {
-    color: var(--text-secondary);
+    color: #999;
     font-weight: 500;
 }
 
 [data-testid="stMetricValue"] {
-    color: var(--text-primary);
+    color: #E0E0E0;
     font-weight: 700;
 }
 
 /* ===== Alert Styles ===== */
+.stAlert {
+    background: #2a2a2a;
+    color: #E0E0E0;
+    border-radius: 8px;
+}
+
 .stSuccess {
-    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    background: linear-gradient(135deg, #10b98155 0%, #10b98133 100%);
     border-left: 4px solid var(--success-color);
 }
 
 .stWarning {
-    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    background: linear-gradient(135deg, #f59e0b55 0%, #f59e0b33 100%);
     border-left: 4px solid var(--warning-color);
 }
 
 .stError {
-    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    background: linear-gradient(135deg, #ef444455 0%, #ef444433 100%);
     border-left: 4px solid var(--error-color);
 }
 
 .stInfo {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    background: linear-gradient(135deg, #667eea55 0%, #667eea33 100%);
     border-left: 4px solid var(--primary-color);
 }
 
 /* ===== Form Elements ===== */
 .stTextInput > div > div > input,
-.stTextArea > div > div > textarea {
-    border-radius: 8px;
-    border: 2px solid var(--border-color);
+.stTextArea > div > div > textarea,
+.stSelectbox > div > div {
+    background: #2a2a2a !important;
+    border: 2px solid #3a3a3a !important;
+    color: #e0e0e0 !important;
+    border-radius: 8px !important;
     transition: border-color 0.2s ease;
 }
 
 .stTextInput > div > div > input:focus,
 .stTextArea > div > div > textarea:focus {
-    border-color: var(--primary-color);
+    border-color: #667eea !important;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
@@ -156,16 +209,21 @@
 }
 
 .stRadio [data-baseweb="radio"] {
-    background: white;
+    background: #2a2a2a;
     padding: 12px 16px;
     border-radius: 8px;
-    border: 2px solid var(--border-color);
+    border: 2px solid #3a3a3a;
     transition: all 0.2s ease;
 }
 
 .stRadio [data-baseweb="radio"]:hover {
-    border-color: var(--primary-color);
-    background: #f8fafc;
+    border-color: #667eea;
+    background: #333;
+}
+
+/* ===== Checkboxes ===== */
+.stCheckbox {
+    color: #E0E0E0;
 }
 
 /* ===== Selectbox ===== */
@@ -173,24 +231,114 @@
     border-radius: 8px;
 }
 
+/* ===== Expander ===== */
+.stExpander {
+    background: #2a2a2a;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+    overflow: hidden;
+}
+
+.streamlit-expanderHeader {
+    background: #2a2a2a;
+    border-radius: 8px;
+    color: #e0e0e0;
+}
+
+.streamlit-expanderContent {
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 0 0 8px 8px;
+}
+
+/* ===== Dataframes ===== */
+.stDataFrame {
+    background: #2a2a2a;
+}
+
+/* ===== Code Blocks ===== */
+.stCodeBlock {
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1E1E1E;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
 /* ===== Custom Classes ===== */
+.custom-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.custom-header h1,
+.custom-header h2,
+.custom-header h3 {
+    color: white !important;
+    margin: 0;
+}
+
+.custom-header p {
+    color: rgba(255,255,255,0.8);
+    margin: 5px 0 0 0;
+}
+
+.card {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+    margin: 10px 0;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
 .hero-section {
     text-align: center;
     padding: 40px 0;
 }
 
 .course-card {
-    background: white;
+    background: #2a2a2a;
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    border: 1px solid #3a3a3a;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .course-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    border-color: #667eea;
 }
 
 .artifact-preview {
@@ -201,19 +349,60 @@
 }
 
 .quiz-question {
-    background: white;
+    background: #2a2a2a;
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 16px;
-    border: 1px solid var(--border-color);
+    border: 1px solid #3a3a3a;
 }
 
 .results-chart {
-    background: white;
+    background: #2a2a2a;
     padding: 24px;
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #3a3a3a;
 }
+
+/* ===== Studio Sections (for learning page) ===== */
+.studio-section {
+    background: #2a2a2a;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 12px;
+    border: 1px solid #3a3a3a;
+}
+
+.studio-section h3 {
+    color: #E0E0E0;
+    margin: 0 0 15px 0;
+    font-size: 18px;
+}
+
+.artifact-card {
+    background: #333;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #3a3a3a;
+    transition: all 0.2s;
+}
+
+.artifact-card:hover {
+    background: #3a3a3a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* ===== Column Spacing ===== */
+[data-testid="column"] {
+    padding: 0.5rem;
+}
+
+/* ===== Hide Streamlit Elements ===== */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
 
 /* ===== Animation Classes ===== */
 @keyframes fadeIn {
@@ -253,21 +442,8 @@
     [data-testid="stMetric"] {
         margin-bottom: 12px;
     }
-}
-
-/* ===== Dark Mode Support ===== */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-light: #0f172a;
-        --text-primary: #f1f5f9;
-        --text-secondary: #94a3b8;
-        --border-color: #334155;
-    }
     
-    .course-card,
-    .quiz-question,
-    .results-chart {
-        background: #1e293b;
+    .card {
+        padding: 15px;
     }
 }
-
