@@ -6,18 +6,30 @@ import sys
 sys.path.append("..")
 
 from utils.api_client import APIClient
+from utils.css_loader import load_css
+from components.sidebar import render_app_sidebar
 
 st.set_page_config(page_title="Landing - CourseCompanion", page_icon="🏠", layout="wide")
+
+# Load CSS
+load_css()
 
 def init_page_state():
     """Initialize page-specific state"""
     if "landing_view" not in st.session_state:
-        st.session_state.landing_view = "main"  # main, browse, discovery
+        st.session_state.landing_view = "main"
+    
+    if not st.session_state.get("user_id"):
+        st.session_state.user_id = "demo_user"
 
 def render_hero_section():
     """Render the hero section with main CTAs"""
-    st.title("🎓 CourseCompanion")
-    st.markdown("### Your AI-Powered Learning Journey")
+    st.markdown("""
+    <div class="custom-header">
+        <h1>🎓 CourseCompanion</h1>
+        <p>Your AI-Powered Learning Journey</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
     Welcome to CourseCompanion! Whether you know exactly what you want to learn 
@@ -29,21 +41,25 @@ def render_hero_section():
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### 🎯 I Know What I Want")
         st.markdown("""
-        Already have courses in mind? Browse our catalog and select 
-        the courses you want to take.
-        """)
+        <div class="card">
+            <h3>🎯 I Know What I Want</h3>
+            <p>Already have courses in mind? Browse our catalog and select the courses you want to take.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
         if st.button("Browse Courses", key="browse_btn", use_container_width=True):
             st.session_state.landing_view = "browse"
             st.rerun()
     
     with col2:
-        st.markdown("### 🔍 Help Me Decide")
         st.markdown("""
-        Not sure where to start? Our AI Discovery Agent will help 
-        you find the perfect learning path.
-        """)
+        <div class="card">
+            <h3>🔍 Help Me Decide</h3>
+            <p>Not sure where to start? Our AI Discovery Agent will help you find the perfect learning path.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
         if st.button("Start Discovery", key="discovery_btn", use_container_width=True):
             st.switch_page("pages/2_discovery.py")
 
@@ -64,37 +80,11 @@ def render_course_browser():
     try:
         courses = api.get_courses()
     except Exception:
-        # Mock data fallback
-        courses = [
-            {
-                "course_id": "xm-cloud-101",
-                "title": "XM Cloud Fundamentals",
-                "description": "Learn the basics of XM Cloud architecture and implementation",
-                "difficulty": "Beginner",
-                "duration": "4 hours",
-                "modules": 5
-            },
-            {
-                "course_id": "search-fundamentals",
-                "title": "Sitecore Search Fundamentals", 
-                "description": "Master Sitecore Search configuration and optimization",
-                "difficulty": "Intermediate",
-                "duration": "3 hours",
-                "modules": 4
-            },
-            {
-                "course_id": "content-hub-101",
-                "title": "Content Hub Basics",
-                "description": "Introduction to Sitecore Content Hub DAM and CMP",
-                "difficulty": "Beginner",
-                "duration": "5 hours",
-                "modules": 6
-            }
-        ]
+        st.error("Failed to load courses from the server.")
     
-    # Initialize selected courses if not exists
+    # Initialize selected courses
     if "temp_selected" not in st.session_state:
-        st.session_state.temp_selected = set(st.session_state.selected_courses)
+        st.session_state.temp_selected = set(st.session_state.get("selected_courses", []))
     
     # Course selection grid
     st.markdown("### Select Your Courses")
@@ -136,9 +126,8 @@ def main():
     """Main page function"""
     init_page_state()
     
-    # Initialize user ID if not set
-    if not st.session_state.user_id:
-        st.session_state.user_id = "demo_user"
+    # Render sidebar
+    render_app_sidebar()
     
     # Render appropriate view
     if st.session_state.landing_view == "browse":
@@ -148,4 +137,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

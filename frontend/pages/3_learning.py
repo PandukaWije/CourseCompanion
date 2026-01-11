@@ -1,197 +1,312 @@
 """
-Learning Environment Page - Content, Chat, Notes, and Artifacts
+Learning Environment Page - Clean 2-Column Layout
 """
 import streamlit as st
 import sys
 sys.path.append("..")
 
 from utils.api_client import APIClient
-from components.chatbot import render_chatbot
-from components.notepad import render_notepad
-from components.artifact_viewer import render_artifact_viewer
+from utils.css_loader import load_css
 
-st.set_page_config(page_title="Learning - CourseCompanion", page_icon="📖", layout="wide")
+from components.chatbot import init_chat_state, add_to_notes, get_mock_response
+from components.sidebar import render_app_sidebar
+
+# Page configuration
+st.set_page_config(
+    page_title="Learning - CourseCompanion",
+    page_icon="📖",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Load CSS
+load_css()
 
 def init_learning_state():
-    """Initialize learning-specific state"""
-    if "chat_messages" not in st.session_state:
-        st.session_state.chat_messages = {}
-    if "notes" not in st.session_state:
-        st.session_state.notes = {}
-
-def check_enrollment():
-    """Check if user has selected courses"""
-    if not st.session_state.get("selected_courses"):
-        st.warning("⚠️ You haven't selected any courses yet!")
-        st.markdown("Please go to the Landing page to select courses or use the Discovery agent.")
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("📚 Browse Courses"):
-                st.switch_page("pages/1_landing.py")
-        with col2:
-            if st.button("🔍 Discover Courses"):
-                st.switch_page("pages/2_discovery.py")
-        return False
-    return True
-
-def render_course_selector():
-    """Render course selection dropdown"""
-    courses = st.session_state.selected_courses
+    """Initialize session state"""
+    defaults = {
+        "chat_messages": {},
+        "notes": {},
+        "quick_notes": {},
+        "current_course": None,
+        "current_module": 0
+    }
     
-    # Get course titles (mock data for now)
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+
+def render_chat_header():
+    """Render chat header"""
+    course_id = st.session_state.current_course
+    
     course_titles = {
         "xm-cloud-101": "XM Cloud Fundamentals",
         "search-fundamentals": "Sitecore Search Fundamentals",
         "content-hub-101": "Content Hub Basics"
     }
     
-    options = [course_titles.get(c, c) for c in courses]
+    current_module = st.session_state.current_module
+    course_name = course_titles.get(course_id, "Course")
     
-    selected_idx = st.selectbox(
-        "📖 Current Course",
-        range(len(options)),
-        format_func=lambda x: options[x],
-        key="course_selector"
-    )
+    st.markdown(f"""
+    <div class="chat-header">
+        <h2>💬 AI Learning Assistant</h2>
+        <p>{course_name} · Module {current_module + 1}</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    st.session_state.current_course = courses[selected_idx]
-    return courses[selected_idx]
+    st.markdown("---")
 
-def render_content_tab(course_id: str):
-    """Render the course content tab"""
-    st.markdown("### 📺 Course Content")
+
+def render_chat_messages():
+    """Render chat messages"""
+    course_id = st.session_state.current_course
+    init_chat_state(course_id)
     
-    # Mock course content
-    course_content = {
-        "xm-cloud-101": {
-            "title": "XM Cloud Fundamentals",
-            "modules": [
-                {"id": 1, "title": "Introduction to XM Cloud", "duration": "15 min", "type": "video"},
-                {"id": 2, "title": "Architecture Overview", "duration": "20 min", "type": "video"},
-                {"id": 3, "title": "Setting Up Your Environment", "duration": "25 min", "type": "video"},
-                {"id": 4, "title": "Component Development", "duration": "30 min", "type": "video"},
-                {"id": 5, "title": "Deployment & Publishing", "duration": "20 min", "type": "video"}
-            ]
-        },
-        "search-fundamentals": {
-            "title": "Sitecore Search Fundamentals",
-            "modules": [
-                {"id": 1, "title": "Search Architecture", "duration": "20 min", "type": "video"},
-                {"id": 2, "title": "Indexing Strategies", "duration": "25 min", "type": "video"},
-                {"id": 3, "title": "Query Optimization", "duration": "20 min", "type": "video"},
-                {"id": 4, "title": "Faceted Search", "duration": "15 min", "type": "video"}
-            ]
-        },
-        "content-hub-101": {
-            "title": "Content Hub Basics",
-            "modules": [
-                {"id": 1, "title": "Content Hub Overview", "duration": "15 min", "type": "video"},
-                {"id": 2, "title": "Asset Management", "duration": "25 min", "type": "video"},
-                {"id": 3, "title": "Content Operations", "duration": "20 min", "type": "video"},
-                {"id": 4, "title": "Integration Patterns", "duration": "30 min", "type": "video"},
-                {"id": 5, "title": "Workflows & Approvals", "duration": "20 min", "type": "video"},
-                {"id": 6, "title": "Reporting & Analytics", "duration": "15 min", "type": "video"}
-            ]
+    messages = st.session_state.chat_messages.get(course_id, [])
+    
+    if not messages:
+        initial_msg = {
+            "role": "assistant",
+            "content": f"""👋 **Welcome! I'm your AI Learning Assistant.**
+
+I'm here to help you master this course. I can:
+
+• **📚 Explain concepts** in detail
+• **🔍 Answer questions** about the material
+• **💡 Clarify confusing topics**
+• **🎯 Provide examples** to illustrate ideas
+• **📝 Summarize key points** from modules
+
+**Current Module:** Module {st.session_state.current_module + 1}
+
+What would you like to learn about?"""
         }
+        st.session_state.chat_messages[course_id] = [initial_msg]
+        messages = [initial_msg]
+    
+    # Render messages
+    for idx, message in enumerate(messages):
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+            
+            # Action buttons for assistant messages
+            if message["role"] == "assistant" and idx > 0:
+                col1, col2, col3, col4 = st.columns([1, 1, 1, 5])
+                
+                with col1:
+                    if st.button("📝", key=f"note_{idx}", help="Add to notes"):
+                        add_to_notes(message["content"], course_id)
+                        st.toast("✅ Added to notes!", icon="📝")
+                
+                with col2:
+                    if st.button("🔖", key=f"bookmark_{idx}", help="Bookmark"):
+                        st.toast("✅ Bookmarked!", icon="🔖")
+                
+                with col3:
+                    if st.button("📋", key=f"copy_{idx}", help="Copy"):
+                        st.toast("✅ Copied!", icon="📋")
+
+
+def render_chat_input():
+    """Render chat input"""
+    course_id = st.session_state.current_course
+    
+    # Suggested prompts for new conversations
+    if len(st.session_state.chat_messages.get(course_id, [])) <= 1:
+        st.markdown("---")
+        st.markdown("#### 💡 Try asking:")
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if st.button("📚 Explain module", key="prompt_explain", use_container_width=True):
+                process_message("Can you explain the key concepts from this module?", course_id)
+        
+        with col2:
+            if st.button("🎯 Give examples", key="prompt_examples", use_container_width=True):
+                process_message("Can you give me practical examples?", course_id)
+        
+        with col3:
+            if st.button("❓ Quiz me", key="prompt_quiz", use_container_width=True):
+                process_message("Can you quiz me on this content?", course_id)
+    
+    # Chat input
+    if prompt := st.chat_input("Ask anything about the course...", key=f"chat_input_{course_id}"):
+        process_message(prompt, course_id)
+
+
+def process_message(prompt: str, course_id: str):
+    """Process user message"""
+    # Add user message
+    st.session_state.chat_messages[course_id].append({
+        "role": "user",
+        "content": prompt
+    })
+    
+    # Get AI response
+    api = APIClient()
+    try:
+        response = api.chat(course_id=course_id, message=prompt)
+        assistant_content = response.get("message", "I couldn't process that request.")
+    except Exception:
+        response = get_mock_response(prompt, course_id)
+        assistant_content = response["message"]
+    
+    # Add assistant response
+    st.session_state.chat_messages[course_id].append({
+        "role": "assistant",
+        "content": assistant_content
+    })
+    
+    st.rerun()
+
+
+def render_artifacts():
+    """Render artifacts section"""
+    st.markdown('<div class="studio-section">', unsafe_allow_html=True)
+    st.markdown("### 🎨 Learning Artifacts")
+    
+    course_id = st.session_state.current_course
+    
+    artifacts = {
+        "xm-cloud-101": [
+            {"icon": "🗺️", "title": "Architecture Mindmap", "size": "1.2 MB"},
+            {"icon": "📄", "title": "Quick Reference", "size": "450 KB"},
+            {"icon": "📊", "title": "Slide Deck", "size": "2.8 MB"}
+        ],
+        "search-fundamentals": [
+            {"icon": "🗺️", "title": "Search Flow Diagram", "size": "980 KB"},
+            {"icon": "📄", "title": "Config Guide", "size": "520 KB"},
+            {"icon": "📊", "title": "Best Practices", "size": "1.9 MB"}
+        ],
+        "content-hub-101": [
+            {"icon": "🗺️", "title": "Ecosystem Map", "size": "1.5 MB"},
+            {"icon": "📄", "title": "User Guide", "size": "780 KB"},
+            {"icon": "📊", "title": "Implementation Deck", "size": "3.2 MB"}
+        ]
     }
     
-    content = course_content.get(course_id, {"title": course_id, "modules": []})
+    course_artifacts = artifacts.get(course_id, [])
     
-    # Module list
-    st.markdown(f"#### {content['title']}")
-    
-    for module in content.get("modules", []):
-        with st.expander(f"📹 Module {module['id']}: {module['title']} ({module['duration']})"):
-            # Video placeholder
-            st.markdown("---")
-            st.markdown("🎬 **Video Player**")
-            st.info("Video content would be displayed here. In production, this would be an embedded video player.")
-            
-            # Placeholder video controls
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.button("⏮️ -30s", key=f"rewind_{course_id}_{module['id']}")
-            with col2:
-                st.button("▶️ Play", key=f"play_{course_id}_{module['id']}")
-            with col3:
-                st.button("⏭️ +30s", key=f"forward_{course_id}_{module['id']}")
-            
-            st.markdown("---")
-            
-            # Quick actions
-            if st.button("💡 Explain this section", key=f"explain_{course_id}_{module['id']}"):
-                st.session_state[f"explain_request_{course_id}"] = f"Explain Module {module['id']}: {module['title']}"
-                st.info("Switch to the Chat tab to see the explanation!")
-
-def render_sidebar(course_id: str):
-    """Render learning page sidebar"""
-    with st.sidebar:
-        st.markdown("### 📊 Progress")
+    for artifact in course_artifacts:
+        st.markdown(f"""
+        <div class="artifact-card">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 28px;">{artifact['icon']}</span>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; font-size: 15px; color: #E0E0E0;">{artifact['title']}</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 4px;">{artifact['size']}</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         
-        # Mock progress
-        progress = 0.35
-        st.progress(progress)
-        st.caption(f"{int(progress * 100)}% complete")
-        
-        st.markdown("---")
-        st.markdown("### ⚡ Quick Actions")
-        
-        if st.button("📝 Take Quiz", use_container_width=True):
-            st.switch_page("pages/4_quiz.py")
-        
-        if st.button("📊 View Results", use_container_width=True):
-            st.switch_page("pages/5_results.py")
-        
-        st.markdown("---")
-        st.markdown("### 📚 My Courses")
-        
-        for course in st.session_state.selected_courses:
-            course_names = {
-                "xm-cloud-101": "XM Cloud Fundamentals",
-                "search-fundamentals": "Search Fundamentals",
-                "content-hub-101": "Content Hub Basics"
-            }
-            name = course_names.get(course, course)
-            if course == course_id:
-                st.markdown(f"**▶️ {name}**")
-            else:
-                st.markdown(f"○ {name}")
-
-def main():
-    """Main page function"""
-    init_learning_state()
-    
-    st.title("📖 Learning Environment")
-    
-    if not check_enrollment():
-        return
-    
-    # Course selector
-    course_id = render_course_selector()
+        if st.button(f"📥 Download {artifact['title']}", key=f"artifact_{artifact['title']}", use_container_width=True):
+            st.toast(f"Downloading {artifact['title']}...", icon="📥")
     
     st.markdown("---")
     
-    # Render sidebar
-    render_sidebar(course_id)
+    # Generate buttons
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("➕ Generate Mindmap", key="gen_mindmap", use_container_width=True):
+            st.toast("Generating mindmap...", icon="🗺️")
     
-    # Main content tabs
-    tab_content, tab_chat, tab_notes, tab_artifacts = st.tabs([
-        "📺 Content", "💬 AI Chat", "📝 Notes", "🎨 Artifacts"
-    ])
+    with col2:
+        if st.button("➕ Generate Summary", key="gen_summary", use_container_width=True):
+            st.toast("Generating summary...", icon="📄")
     
-    with tab_content:
-        render_content_tab(course_id)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+def render_notes():
+    """Render notes section"""
+    st.markdown('<div class="studio-section">', unsafe_allow_html=True)
+    st.markdown("### 📝 Course Notes")
     
-    with tab_chat:
-        render_chatbot(course_id)
+    course_id = st.session_state.current_course
     
-    with tab_notes:
-        render_notepad(course_id)
+    if "quick_notes" not in st.session_state:
+        st.session_state.quick_notes = {}
     
-    with tab_artifacts:
-        render_artifact_viewer(course_id)
+    if course_id not in st.session_state.quick_notes:
+        st.session_state.quick_notes[course_id] = ""
+    
+    note = st.text_area(
+        "Notes",
+        value=st.session_state.quick_notes.get(course_id, ""),
+        height=300,
+        placeholder="• Key point 1\n• Key point 2\n• Question to review\n\nYour notes here...",
+        key=f"quick_note_{course_id}"
+    )
+    
+    st.session_state.quick_notes[course_id] = note
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if st.button("💾 Save Notes", key="save_note", use_container_width=True):
+            st.toast("✅ Notes saved!", icon="💾")
+    
+    with col2:
+        if st.button("🗑️ Clear Notes", key="clear_notes", use_container_width=True):
+            st.session_state.quick_notes[course_id] = ""
+            st.rerun()
+    
+    word_count = len(note.split()) if note else 0
+    st.caption(f"📊 {word_count} words")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+def render_studio_panel():
+    """Render studio panel with Artifacts and Notes"""
+    tab1, tab2 = st.tabs(["🎨 Artifacts", "📝 Notes"])
+    
+    with tab1:
+        render_artifacts()
+    
+    with tab2:
+        render_notes()
+
+
+def main():
+    """Main application"""
+    init_learning_state()
+    
+    # Check if course is selected
+    if not st.session_state.get("current_course"):
+        st.error("❌ No course selected!")
+        st.info("Please select a course from the Discovery page first.")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🔍 Go to Discovery", use_container_width=True):
+                st.switch_page("pages/2_discovery.py")
+        with col2:
+            if st.button("🏠 Go to Landing", use_container_width=True):
+                st.switch_page("pages/1_landing.py")
+        return
+    
+    # Render app sidebar
+    render_app_sidebar()
+    
+    # Main layout - 2 columns
+    col_chat, col_studio = st.columns([2.5, 1.2], gap="medium")
+    
+    # Chat column
+    with col_chat:
+        render_chat_header()
+        render_chat_messages()
+        render_chat_input()
+    
+    # Studio column
+    with col_studio:
+        render_studio_panel()
+
 
 if __name__ == "__main__":
     main()
-

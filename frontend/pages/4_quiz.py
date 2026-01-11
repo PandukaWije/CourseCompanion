@@ -6,8 +6,13 @@ import sys
 sys.path.append("..")
 
 from utils.api_client import APIClient
+from utils.css_loader import load_css
+from components.sidebar import render_app_sidebar
 
 st.set_page_config(page_title="Quiz - CourseCompanion", page_icon="📝", layout="wide")
+
+# Load CSS
+load_css()
 
 def init_quiz_state():
     """Initialize quiz-specific state"""
@@ -318,30 +323,12 @@ def render_quiz_questions():
             if st.button("📊 View Detailed Results"):
                 st.switch_page("pages/5_results.py")
 
-def render_sidebar():
-    """Render quiz page sidebar"""
-    with st.sidebar:
-        st.markdown("### 📝 Quiz Tips")
-        st.markdown("""
-        - Read each question carefully
-        - Review all options before selecting
-        - You can change answers before submitting
-        - Take your time!
-        """)
-        
-        st.markdown("---")
-        
-        if st.session_state.quiz_started:
-            st.markdown("### 📊 Progress")
-            questions = get_quiz_questions(st.session_state.quiz_course)
-            answered = len(st.session_state.quiz_answers)
-            st.progress(answered / len(questions) if questions else 0)
-            st.caption(f"{answered}/{len(questions)} answered")
+
 
 def main():
     """Main page function"""
     init_quiz_state()
-    render_sidebar()
+    render_app_sidebar()
     
     st.title("📝 Course Quiz")
     

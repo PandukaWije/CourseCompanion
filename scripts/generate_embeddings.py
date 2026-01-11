@@ -1,6 +1,6 @@
 """
 Embedding Generation Script
-Generates OpenAI embeddings for knowledge base chunks and stores them in MongoDB.
+Generates Azure OpenAI embeddings for knowledge base chunks and stores them in MongoDB.
 """
 import asyncio
 import os
@@ -20,7 +20,7 @@ load_dotenv()
 
 # Check for OpenAI
 try:
-    from openai import OpenAI
+    from openai import AzureOpenAI
     OPENAI_AVAILABLE = True
 except ImportError:
     OPENAI_AVAILABLE = False
@@ -28,29 +28,34 @@ except ImportError:
 
 
 class EmbeddingGenerator:
-    """Generates embeddings for text content using OpenAI"""
+    """Generates embeddings for text content using Azure OpenAI"""
     
     def __init__(self):
-        self.api_key = os.getenv("OPENAI_API_KEY")
-        self.model = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
+        self.api_key = os.getenv("AZURE_OPENAI_API_KEY")
+        self.endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+        self.deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
+        self.api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01")
         self.dimensions = int(os.getenv("EMBEDDING_DIMENSIONS", "1536"))
         
-        if OPENAI_AVAILABLE and self.api_key:
-            self.client = OpenAI(api_key=self.api_key)
+        if OPENAI_AVAILABLE and self.api_key and self.endpoint:
+            self.client = AzureOpenAI(
+                api_key=self.api_key,
+                api_version=self.api_version,
+                azure_endpoint=self.endpoint
+            )
         else:
             self.client = None
     
     def generate_embedding(self, text: str) -> List[float]:
         """Generate embedding for a single text"""
         if not self.client:
-            print("⚠️ OpenAI client not available, using mock embeddings")
+            print("⚠️ Azure OpenAI client not available, using mock embeddings")
             return self._mock_embedding()
         
         try:
             response = self.client.embeddings.create(
-                model=self.model,
-                input=text,
-                dimensions=self.dimensions
+                model=self.deployment_name,
+                input=text
             )
             return response.data[0].embedding
         except Exception as e:
@@ -60,14 +65,13 @@ class EmbeddingGenerator:
     def generate_embeddings_batch(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for multiple texts in batch"""
         if not self.client:
-            print("⚠️ OpenAI client not available, using mock embeddings")
+            print("⚠️ Azure OpenAI client not available, using mock embeddings")
             return [self._mock_embedding() for _ in texts]
         
         try:
             response = self.client.embeddings.create(
-                model=self.model,
-                input=texts,
-                dimensions=self.dimensions
+                model=self.deployment_name,
+                input=texts
             )
             return [item.embedding for item in response.data]
         except Exception as e:
@@ -120,7 +124,7 @@ async def generate_knowledge_base_embeddings(db, generator: EmbeddingGenerator, 
                 {
                     "$set": {
                         "embedding": embedding,
-                        "embedding_model": generator.model,
+                        "embedding_model": generator.deployment_name,
                         "embedding_updated_at": datetime.utcnow()
                     }
                 }
@@ -157,7 +161,7 @@ async def generate_course_embeddings(db, generator: EmbeddingGenerator):
             {
                 "$set": {
                     "embedding": embedding,
-                    "embedding_model": generator.model,
+                    "embedding_model": generator.deployment_name,
                     "embedding_updated_at": datetime.utcnow()
                 }
             }
@@ -231,11 +235,16 @@ async def main():
     print("="*50 + "\n")
     
     # Check for API key
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        print("⚠️ OPENAI_API_KEY not set in environment")
+    api_key = os.getenv("AZURE_OPENAI_API_KEY")
+    endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+    
+    if not api_key or not endpoint:
+        print("⚠️ Azure OpenAI credentials not set in environment")
         print("  Embeddings will use mock data for testing")
-        print("  Set OPENAI_API_KEY in .env file for real embeddings\n")
+        print("  Add to .env file:")
+        print("    AZURE_OPENAI_API_KEY=your-key-here")
+        print("    AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/")
+        print("    AZURE_OPENAI_DEPLOYMENT_NAME=text-embedding-ada-002\n")
     
     try:
         db = await get_database()
@@ -243,7 +252,9 @@ async def main():
         
         # Initialize embedding generator
         generator = EmbeddingGenerator()
-        print(f"🤖 Using model: {generator.model}")
+        print(f"🤖 Using Azure OpenAI")
+        print(f"   Endpoint: {generator.endpoint}")
+        print(f"   Deployment: {generator.deployment_name}")
         print(f"   Dimensions: {generator.dimensions}\n")
         
         # Generate embeddings
@@ -271,4 +282,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-

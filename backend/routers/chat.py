@@ -1,13 +1,19 @@
 """
 Chat Router - RAG chatbot endpoints
+UPDATED: Added error logging to debug issues
 """
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Optional
+import logging
 
 from services.rag_chatbot import RAGChatbot
 
 router = APIRouter()
+
+# Setup logging
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 class ChatRequest(BaseModel):
@@ -43,29 +49,41 @@ async def chat(request: ChatRequest):
     3. Include source references
     """
     try:
+        logger.info(f"Chat request - Course: {request.course_id}, Message: {request.message[:50]}...")
+        
         chatbot = RAGChatbot(course_id=request.course_id)
         response = await chatbot.get_response(
             message=request.message,
             history=request.history
         )
+        
+        logger.info(f"Chat response generated - Sources: {len(response.get('sources', []))}")
+        
         return ChatResponse(
             message=response["message"],
             sources=response.get("sources", []),
             course_id=request.course_id
         )
+        
     except Exception as e:
-        # Fallback response for demo
-        fallback_responses = {
-            "xm-cloud-101": "Based on the XM Cloud course materials, I can help explain concepts about headless CMS, component development, and deployment. What specific topic would you like to explore?",
-            "search-fundamentals": "I can help you understand Sitecore Search concepts including indexing, facets, and query optimization. What would you like to know?",
-            "content-hub-101": "Let me help you with Content Hub topics like DAM, workflows, and content operations. What area interests you?"
-        }
+        # LOG THE ERROR SO WE CAN SEE IT!
+        logger.error(f"Chat error for course {request.course_id}: {str(e)}", exc_info=True)
+        
+        # Return error in response for debugging
+        error_message = f"""I encountered an error while processing your question.
+
+**Error**: {str(e)}
+
+**Troubleshooting:**
+1. Check backend logs for full error details
+2. Verify MongoDB has knowledge base for course: {request.course_id}
+3. Check Azure OpenAI credentials in .env
+4. Ensure vector index is active in Atlas
+
+Please check the backend terminal for detailed error information."""
         
         return ChatResponse(
-            message=fallback_responses.get(
-                request.course_id,
-                "I'm here to help with your course questions. Could you please rephrase your question?"
-            ),
+            message=error_message,
             sources=[],
             course_id=request.course_id
         )
@@ -91,4 +109,3 @@ async def clear_chat_history(user_id: str, course_id: str):
         "user_id": user_id,
         "course_id": course_id
     }
-

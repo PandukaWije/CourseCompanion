@@ -6,8 +6,13 @@ import sys
 sys.path.append("..")
 
 from utils.api_client import APIClient
+from utils.css_loader import load_css
+from components.sidebar import render_app_sidebar
 
 st.set_page_config(page_title="Discovery - CourseCompanion", page_icon="🔍", layout="wide")
+
+# Load CSS
+load_css()
 
 def init_discovery_state():
     """Initialize discovery-specific state"""
@@ -218,7 +223,7 @@ def render_sidebar():
 def main():
     """Main page function"""
     init_discovery_state()
-    render_sidebar()
+    render_app_sidebar()
     render_chat_interface()
 
 if __name__ == "__main__":
