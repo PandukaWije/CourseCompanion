@@ -3,10 +3,20 @@ RAG Chatbot - Course-specific Retrieval-Augmented Generation chatbot
 """
 from typing import List, Dict, Any, Optional
 import os
+from pathlib import Path
+import sys
+
+# Add backend to path for config import
+backend_path = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_path))
+
+try:
+    from config import settings
+except ImportError:
+    settings = None
 
 # LangChain imports - these will be used when packages are installed
-# from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-# from langchain_mongodb import MongoDBAtlasVectorSearch
+# from langchain_openai import ChatOpenAI, OpenAIEmbeddings, AzureChatOpenAI, AzureOpenAIEmbeddings
 # from langchain.chains import ConversationalRetrievalChain
 # from langchain.memory import ConversationBufferMemory
 # from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
@@ -27,11 +37,29 @@ class RAGChatbot:
         self.course_id = course_id
         self.knowledge_base = self._load_knowledge_base()
         
-        # In production, initialize LangChain components
-        # self.llm = ChatOpenAI(model="gpt-4", temperature=0.7)
-        # self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-        # self.retriever = self._setup_retriever()
-        # self.chain = self._setup_chain()
+        # In production, initialize LangChain components with Azure OpenAI
+        # if settings and settings.USE_AZURE_OPENAI:
+        #     self.llm = AzureChatOpenAI(
+        #         azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+        #         api_key=settings.AZURE_OPENAI_API_KEY,
+        #         api_version=settings.AZURE_OPENAI_API_VERSION,
+        #         deployment_name=settings.AZURE_OPENAI_DEPLOYMENT_NAME,
+        #         temperature=0.7
+        #     )
+        #     # Embeddings (when needed)
+        #     # self.embeddings = AzureOpenAIEmbeddings(
+        #     #     azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+        #     #     api_key=settings.AZURE_OPENAI_API_KEY,
+        #     #     api_version=settings.AZURE_OPENAI_API_VERSION,
+        #     #     deployment=settings.AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME
+        #     # )
+        # else:
+        #     # Fallback to regular OpenAI
+        #     self.llm = ChatOpenAI(model=settings.OPENAI_MODEL, temperature=0.7)
+        #     # self.embeddings = OpenAIEmbeddings(model=settings.OPENAI_EMBEDDING_MODEL)
+        # 
+        # # self.retriever = self._setup_retriever()
+        # # self.chain = self._setup_chain()
     
     def _load_knowledge_base(self) -> Dict[str, List[Dict]]:
         """Load mock knowledge base for demo"""
@@ -249,39 +277,38 @@ Could you rephrase your question or ask about a specific topic from the course? 
             "sources": sources
         }
     
-    # Production LangChain setup (commented for reference)
+    # Production LangChain setup with Azure OpenAI and FAISS (commented for reference)
     """
     def _setup_retriever(self):
-        '''Setup MongoDB Atlas Vector Search retriever'''
-        from langchain_mongodb import MongoDBAtlasVectorSearch
-        from pymongo import MongoClient
+        '''Setup FAISS Vector Search retriever'''
+        from models.local_storage import vector_store
         
-        client = MongoClient(os.getenv("MONGODB_URI"))
-        collection = client[os.getenv("MONGODB_DB_NAME")]["knowledge_base"]
+        # Load FAISS index (if embeddings have been generated)
+        vector_store.load_index("course_knowledge_base")
         
-        vectorstore = MongoDBAtlasVectorSearch(
-            collection=collection,
-            embedding=self.embeddings,
-            index_name="course_content_index"
-        )
-        
-        # Create filtered retriever for course-specific search
-        return vectorstore.as_retriever(
-            search_kwargs={
-                "k": 5,
-                "filter": {"course_id": self.course_id}
-            }
-        )
+        # Note: For now, using simple keyword search
+        # Once embeddings are generated, this will use vector similarity
+        pass
     
     def _setup_chain(self):
-        '''Setup the conversational retrieval chain'''
+        '''Setup the conversational retrieval chain with Azure OpenAI'''
         from langchain.chains import ConversationalRetrievalChain
         from langchain.memory import ConversationBufferMemory
+        from langchain_openai import AzureChatOpenAI
         
         memory = ConversationBufferMemory(
             memory_key="chat_history",
             return_messages=True,
             output_key="answer"
+        )
+        
+        # Use Azure OpenAI for chat
+        llm = AzureChatOpenAI(
+            azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+            api_key=settings.AZURE_OPENAI_API_KEY,
+            api_version=settings.AZURE_OPENAI_API_VERSION,
+            deployment_name=settings.AZURE_OPENAI_DEPLOYMENT_NAME,
+            temperature=0.7
         )
         
         system_prompt = '''You are a helpful learning assistant for a course. 
@@ -293,11 +320,13 @@ Could you rephrase your question or ask about a specific topic from the course? 
         '''
         
         return ConversationalRetrievalChain.from_llm(
-            llm=self.llm,
+            llm=llm,
             retriever=self.retriever,
             memory=memory,
             return_source_documents=True,
             combine_docs_chain_kwargs={"prompt": system_prompt}
         )
     """
+
+
 

@@ -236,3 +236,7 @@ def render_chatbot(course_id: str):
         ]
         st.rerun()
 
+
+
+
+

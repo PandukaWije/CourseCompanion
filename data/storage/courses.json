@@ -1,0 +1,146 @@
+{
+  "xm-cloud-101": {
+    "course_id": "xm-cloud-101",
+    "title": "XM Cloud Fundamentals",
+    "description": "Learn the basics of XM Cloud architecture and implementation. This comprehensive course covers everything from setting up your development environment to deploying your first XM Cloud application.",
+    "difficulty": "Beginner",
+    "duration": "4 hours",
+    "modules": [
+      {
+        "id": 1,
+        "title": "Introduction to XM Cloud",
+        "duration": "15 min",
+        "type": "video",
+        "description": "Overview of XM Cloud and its place in the Sitecore ecosystem"
+      },
+      {
+        "id": 2,
+        "title": "Architecture Overview",
+        "duration": "20 min",
+        "type": "video",
+        "description": "Understanding the headless architecture and component structure"
+      },
+      {
+        "id": 3,
+        "title": "Setting Up Your Environment",
+        "duration": "25 min",
+        "type": "video",
+        "description": "Development environment setup and tooling"
+      },
+      {
+        "id": 4,
+        "title": "Component Development",
+        "duration": "30 min",
+        "type": "video",
+        "description": "Building components with JSS and Next.js"
+      },
+      {
+        "id": 5,
+        "title": "Deployment & Publishing",
+        "duration": "20 min",
+        "type": "video",
+        "description": "Deploying to XM Cloud and publishing content"
+      }
+    ],
+    "prerequisites": [],
+    "topics": ["architecture", "development", "deployment", "fundamentals"],
+    "keywords": ["headless", "cms", "react", "nextjs", "jss", "saas", "cloud"],
+    "roles": ["developer", "architect"]
+  },
+  "search-fundamentals": {
+    "course_id": "search-fundamentals",
+    "title": "Sitecore Search Fundamentals",
+    "description": "Master Sitecore Search configuration and optimization. Learn how to implement powerful search experiences that help users discover content efficiently.",
+    "difficulty": "Intermediate",
+    "duration": "3 hours",
+    "modules": [
+      {
+        "id": 1,
+        "title": "Search Architecture",
+        "duration": "20 min",
+        "type": "video",
+        "description": "Understanding search infrastructure and components"
+      },
+      {
+        "id": 2,
+        "title": "Indexing Strategies",
+        "duration": "25 min",
+        "type": "video",
+        "description": "Content indexing and crawling configuration"
+      },
+      {
+        "id": 3,
+        "title": "Query Optimization",
+        "duration": "20 min",
+        "type": "video",
+        "description": "Boosting, relevance tuning, and performance"
+      },
+      {
+        "id": 4,
+        "title": "Faceted Search",
+        "duration": "15 min",
+        "type": "video",
+        "description": "Implementing facets and filters for better UX"
+      }
+    ],
+    "prerequisites": ["xm-cloud-101"],
+    "topics": ["indexing", "facets", "optimization", "architecture"],
+    "keywords": ["search", "indexing", "facets", "relevance", "performance", "discovery"],
+    "roles": ["developer", "architect", "admin"]
+  },
+  "content-hub-101": {
+    "course_id": "content-hub-101",
+    "title": "Content Hub Basics",
+    "description": "Introduction to Sitecore Content Hub DAM and CMP. Learn how to manage digital assets, create content workflows, and integrate with other systems.",
+    "difficulty": "Beginner",
+    "duration": "5 hours",
+    "modules": [
+      {
+        "id": 1,
+        "title": "Content Hub Overview",
+        "duration": "15 min",
+        "type": "video",
+        "description": "Introduction to the Content Hub platform"
+      },
+      {
+        "id": 2,
+        "title": "Asset Management",
+        "duration": "25 min",
+        "type": "video",
+        "description": "Working with the Digital Asset Management features"
+      },
+      {
+        "id": 3,
+        "title": "Content Operations",
+        "duration": "20 min",
+        "type": "video",
+        "description": "Content Marketing Platform capabilities"
+      },
+      {
+        "id": 4,
+        "title": "Integration Patterns",
+        "duration": "30 min",
+        "type": "video",
+        "description": "API integration and connector setup"
+      },
+      {
+        "id": 5,
+        "title": "Workflows & Approvals",
+        "duration": "20 min",
+        "type": "video",
+        "description": "Building automated content workflows"
+      },
+      {
+        "id": 6,
+        "title": "Reporting & Analytics",
+        "duration": "15 min",
+        "type": "video",
+        "description": "Measuring content performance"
+      }
+    ],
+    "prerequisites": [],
+    "topics": ["dam", "cmp", "workflows", "integration"],
+    "keywords": ["content", "dam", "assets", "workflow", "marketing", "digital", "media"],
+    "roles": ["marketer", "content author", "admin"]
+  }
+}

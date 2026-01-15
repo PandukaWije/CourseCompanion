@@ -1,0 +1,92 @@
+{
+  "xm-cloud-101-chunk-001": {
+    "chunk_id": "xm-cloud-101-chunk-001",
+    "course_id": "xm-cloud-101",
+    "content": "XM Cloud is Sitecore's cloud-native, SaaS content management platform. It represents a significant evolution in the Sitecore ecosystem, providing a fully managed, scalable solution for digital experience management. Unlike traditional Sitecore installations, XM Cloud eliminates the need for infrastructure management, allowing teams to focus purely on building great digital experiences.",
+    "module": 1,
+    "timestamp": "0:00",
+    "type": "transcript",
+    "topic": "introduction"
+  },
+  "xm-cloud-101-chunk-002": {
+    "chunk_id": "xm-cloud-101-chunk-002",
+    "course_id": "xm-cloud-101",
+    "content": "The key differentiator of XM Cloud is its headless architecture. In a headless CMS, the content management backend is completely separated from the frontend presentation layer. This separation allows developers to use modern frontend frameworks like React and Next.js to build user interfaces, while content authors use the familiar Sitecore authoring experience.",
+    "module": 1,
+    "timestamp": "3:30",
+    "type": "transcript",
+    "topic": "architecture"
+  },
+  "xm-cloud-101-chunk-003": {
+    "chunk_id": "xm-cloud-101-chunk-003",
+    "course_id": "xm-cloud-101",
+    "content": "The XM Cloud architecture consists of three main components: Content Management (CM) for authoring, Experience Edge for content delivery, and Pages for visual editing. Content Management provides the backend environment where content authors create and manage content. Experience Edge is a globally distributed CDN that serves content via GraphQL APIs. Pages is a visual page builder that allows marketers to compose pages without developer intervention.",
+    "module": 2,
+    "timestamp": "5:30",
+    "type": "transcript",
+    "topic": "architecture"
+  },
+  "xm-cloud-101-chunk-004": {
+    "chunk_id": "xm-cloud-101-chunk-004",
+    "course_id": "xm-cloud-101",
+    "content": "Setting up your XM Cloud development environment requires several tools: Node.js (LTS version), a code editor like VS Code, Git for version control, and the Sitecore CLI. The recommended approach is to use the official XM Cloud starter template, which provides a pre-configured Next.js application with all the necessary Sitecore integrations.",
+    "module": 3,
+    "timestamp": "10:00",
+    "type": "transcript",
+    "topic": "setup"
+  },
+  "xm-cloud-101-chunk-005": {
+    "chunk_id": "xm-cloud-101-chunk-005",
+    "course_id": "xm-cloud-101",
+    "content": "To initialize a new XM Cloud project, use the command: npx create-sitecore-jss. This command scaffolds a new project with the JSS SDK pre-configured. The starter template includes sample components, routing setup, and integration with the Sitecore Layout Service.",
+    "module": 3,
+    "timestamp": "15:00",
+    "type": "transcript",
+    "topic": "setup"
+  },
+  "xm-cloud-101-chunk-006": {
+    "chunk_id": "xm-cloud-101-chunk-006",
+    "course_id": "xm-cloud-101",
+    "content": "Components in XM Cloud are built using the Sitecore JavaScript SDK (JSS) with React or Next.js. Each component maps to a Sitecore rendering and receives data through the fields prop. The fields prop contains all the content defined in Sitecore, making it easy to display dynamic content in your components.",
+    "module": 4,
+    "timestamp": "20:00",
+    "type": "transcript",
+    "topic": "development"
+  },
+  "xm-cloud-101-chunk-007": {
+    "chunk_id": "xm-cloud-101-chunk-007",
+    "course_id": "xm-cloud-101",
+    "content": "Here's an example of a basic JSS component: import { Text, RichText } from '@sitecore-jss/sitecore-jss-nextjs'; const HeroBanner = ({ fields }) => { return (<div className='hero'><Text field={fields.title} tag='h1' /><RichText field={fields.body} /></div>); }; export default HeroBanner;",
+    "module": 4,
+    "timestamp": "22:00",
+    "type": "code_example",
+    "topic": "development"
+  },
+  "xm-cloud-101-chunk-008": {
+    "chunk_id": "xm-cloud-101-chunk-008",
+    "course_id": "xm-cloud-101",
+    "content": "The Experience Editor allows content authors to edit content directly on the page. For this to work, components must use the JSS field helper components like Text, RichText, and Image. These helper components add the necessary metadata for inline editing to function properly.",
+    "module": 4,
+    "timestamp": "25:00",
+    "type": "transcript",
+    "topic": "development"
+  },
+  "xm-cloud-101-chunk-009": {
+    "chunk_id": "xm-cloud-101-chunk-009",
+    "course_id": "xm-cloud-101",
+    "content": "Deployment to XM Cloud is done through the XM Cloud Deploy app. This cloud-based CI/CD solution connects to your GitHub repository and automatically deploys changes when you push to your configured branch. Environment variables and secrets are configured in the Deploy dashboard, keeping sensitive information secure.",
+    "module": 5,
+    "timestamp": "30:00",
+    "type": "transcript",
+    "topic": "deployment"
+  },
+  "xm-cloud-101-chunk-010": {
+    "chunk_id": "xm-cloud-101-chunk-010",
+    "course_id": "xm-cloud-101",
+    "content": "The deployment process involves several steps: 1) Push code to GitHub, 2) XM Cloud Deploy detects the change, 3) Build process runs, 4) Application is deployed to Experience Edge, 5) Content is available via the GraphQL API. This entire process is automated and typically takes just a few minutes.",
+    "module": 5,
+    "timestamp": "33:00",
+    "type": "transcript",
+    "topic": "deployment"
+  }
+}

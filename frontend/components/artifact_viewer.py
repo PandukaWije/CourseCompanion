@@ -453,3 +453,7 @@ def render_artifact_viewer(course_id: str):
     with col2:
         st.button("📝 Generate Study Guide", disabled=True, help="Coming in future version")
 
+
+
+
+

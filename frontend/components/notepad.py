@@ -152,3 +152,7 @@ Notes added from chat will appear here automatically.
             st.session_state.notes[course_id] += "\n\n### Key Concept\n> Important: \n\n"
             st.rerun()
 
+
+
+
+

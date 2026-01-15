@@ -92,8 +92,8 @@ CourseCompanion/
 ### Prerequisites
 
 - Python 3.10+
-- MongoDB (local or Atlas)
-- OpenAI API key
+- **Azure OpenAI** service with GPT-4 deployment (or regular OpenAI API key)
+- **No MongoDB required** - uses local JSON storage
 
 ### 1. Clone & Setup
 
@@ -120,20 +120,22 @@ pip install -r requirements.txt
 # Copy environment template
 cp env.example .env
 
-# Edit .env with your values:
-# - MONGODB_URI (your MongoDB connection string)
-# - OPENAI_API_KEY (your OpenAI API key)
+# Edit .env with your Azure OpenAI credentials:
+# - AZURE_OPENAI_API_KEY (from Azure Portal)
+# - AZURE_OPENAI_ENDPOINT (your resource endpoint)
+# - AZURE_OPENAI_DEPLOYMENT_NAME (your GPT-4 deployment name)
 ```
 
-### 3. Seed Database
+**See [AZURE_SETUP_GUIDE.md](AZURE_SETUP_GUIDE.md) for detailed Azure OpenAI configuration.**
 
-```bash
-# Populate MongoDB with initial data
-python scripts/seed_database.py
+### 3. Verify Data Files
 
-# Generate embeddings (optional, requires OpenAI API key)
-python scripts/generate_embeddings.py
-```
+Initial data files are pre-created in `data/storage/`:
+- ✅ Courses loaded
+- ✅ Knowledge base ready
+- ✅ Storage system initialized
+
+No database seeding required!
 
 ### 4. Start the Backend
 
@@ -187,36 +189,37 @@ flake8
 
 - **Frontend**: Streamlit
 - **Backend**: FastAPI
-- **Database**: MongoDB Atlas
+- **Database**: Local JSON Storage (replaces MongoDB)
 - **AI/ML**: 
   - LangChain for RAG
   - LangGraph for agent workflows
-  - OpenAI GPT-4 & Embeddings
-- **Vector Search**: MongoDB Atlas Vector Search
+  - **Azure OpenAI** GPT-4 (or OpenAI as fallback)
+  - Embeddings (optional, for future enhancement)
+- **Vector Search**: FAISS (prepared, not yet active)
 
-## 📋 MongoDB Atlas Setup
+## 📋 Storage & Configuration
 
-1. Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/atlas)
-2. Create a database user
-3. Whitelist your IP address
-4. Get your connection string
-5. Create a Vector Search index:
-   ```json
-   {
-     "fields": [
-       {
-         "type": "vector",
-         "path": "embedding",
-         "numDimensions": 1536,
-         "similarity": "cosine"
-       },
-       {
-         "type": "filter",
-         "path": "course_id"
-       }
-     ]
-   }
-   ```
+### Local JSON Storage
+
+All data is stored in `data/storage/` as JSON files:
+- **courses.json** - Course catalog (pre-populated with 3 courses)
+- **knowledge_base.json** - Course content chunks for RAG
+- **users.json**, **conversations.json**, **quiz_results.json**, **notes.json** - User data
+
+### Azure OpenAI Setup
+
+1. Create an Azure OpenAI resource in [Azure Portal](https://portal.azure.com)
+2. Deploy a GPT-4 model in Azure OpenAI Studio
+3. Copy your API key and endpoint
+4. Update `.env` with your credentials
+
+**Detailed setup instructions: [AZURE_SETUP_GUIDE.md](AZURE_SETUP_GUIDE.md)**
+
+### FAISS Vector Store (Optional)
+
+- FAISS is installed and ready for vector embeddings
+- Currently using keyword-based search
+- Run `python scripts/generate_embeddings.py` to enable semantic search
 
 ## 🎯 Hackathon Demo Flow
 
@@ -234,4 +237,6 @@ Built with ❤️ for the hackathon!
 ## 📄 License
 
 MIT License - feel free to use and modify!
+
+
 

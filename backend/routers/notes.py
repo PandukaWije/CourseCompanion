@@ -140,3 +140,7 @@ async def get_all_user_notes(user_id: str):
         "notes": user_notes
     }
 
+
+
+
+

@@ -16,11 +16,19 @@ class Settings(BaseSettings):
     HOST: str = "0.0.0.0"
     PORT: int = 8000
     
-    # MongoDB
-    MONGODB_URI: str = "mongodb://localhost:27017"
-    MONGODB_DB_NAME: str = "coursecompanion"
+    # Local Storage (replacing MongoDB)
+    USE_LOCAL_STORAGE: bool = True
+    STORAGE_DIR: str = "data/storage"
     
-    # OpenAI
+    # Azure OpenAI
+    USE_AZURE_OPENAI: bool = True
+    AZURE_OPENAI_API_KEY: str = ""
+    AZURE_OPENAI_ENDPOINT: str = ""
+    AZURE_OPENAI_API_VERSION: str = "2024-02-15-preview"
+    AZURE_OPENAI_DEPLOYMENT_NAME: str = ""  # Your GPT-4 deployment name
+    AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME: str = ""  # Your embedding deployment name (optional)
+    
+    # Legacy OpenAI (fallback if not using Azure)
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4"
     OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
@@ -59,4 +67,6 @@ def get_settings() -> Settings:
 
 # Global settings instance
 settings = get_settings()
+
+
 

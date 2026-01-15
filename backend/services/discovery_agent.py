@@ -4,10 +4,21 @@ Discovery Agent - LangGraph-based course recommendation agent
 from typing import List, Dict, Any, Optional, TypedDict
 from enum import Enum
 import os
+from pathlib import Path
+import sys
+
+# Add backend to path for config import
+backend_path = Path(__file__).parent.parent
+sys.path.insert(0, str(backend_path))
+
+try:
+    from config import settings
+except ImportError:
+    settings = None
 
 # LangGraph imports - these will be used when LangGraph is installed
 # from langgraph.graph import StateGraph, END
-# from langchain_openai import ChatOpenAI
+# from langchain_openai import ChatOpenAI, AzureChatOpenAI
 # from langchain.prompts import ChatPromptTemplate
 
 
@@ -49,8 +60,18 @@ class DiscoveryAgent:
         self.max_turns = 5
         self.courses = self._load_courses()
         
-        # In production, initialize LangChain/LangGraph components here
-        # self.llm = ChatOpenAI(model="gpt-4")
+        # In production, initialize LangChain/LangGraph components with Azure OpenAI
+        # if settings and settings.USE_AZURE_OPENAI:
+        #     self.llm = AzureChatOpenAI(
+        #         azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+        #         api_key=settings.AZURE_OPENAI_API_KEY,
+        #         api_version=settings.AZURE_OPENAI_API_VERSION,
+        #         deployment_name=settings.AZURE_OPENAI_DEPLOYMENT_NAME,
+        #         temperature=0.7
+        #     )
+        # else:
+        #     self.llm = ChatOpenAI(model=settings.OPENAI_MODEL)
+        # 
         # self.workflow = self._build_workflow()
     
     def _load_courses(self) -> List[Dict]:
@@ -289,10 +310,22 @@ What catches your attention?"""
 
 Let me find the best matches for your learning goals... 🔍"""
     
-    # Production LangGraph workflow (commented for reference)
+    # Production LangGraph workflow with Azure OpenAI (commented for reference)
     """
     def _build_workflow(self) -> StateGraph:
-        '''Build the LangGraph workflow'''
+        '''Build the LangGraph workflow with Azure OpenAI'''
+        from langgraph.graph import StateGraph, END
+        from langchain_openai import AzureChatOpenAI
+        
+        # Initialize Azure OpenAI
+        llm = AzureChatOpenAI(
+            azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+            api_key=settings.AZURE_OPENAI_API_KEY,
+            api_version=settings.AZURE_OPENAI_API_VERSION,
+            deployment_name=settings.AZURE_OPENAI_DEPLOYMENT_NAME,
+            temperature=0.7
+        )
+        
         workflow = StateGraph(DiscoveryState)
         
         # Add nodes
@@ -327,4 +360,6 @@ Let me find the best matches for your learning goals... 🔍"""
         
         return workflow.compile()
     """
+
+
 

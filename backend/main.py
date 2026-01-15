@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from config import settings
-from models.database import connect_to_mongo, close_mongo_connection
+from models.local_storage import initialize_storage, close_storage
 from routers import discovery, chat, notes, artifacts, quiz
 
 
@@ -14,10 +14,10 @@ from routers import discovery, chat, notes, artifacts, quiz
 async def lifespan(app: FastAPI):
     """Manage application lifecycle - startup and shutdown events"""
     # Startup
-    await connect_to_mongo()
+    await initialize_storage()
     yield
     # Shutdown
-    await close_mongo_connection()
+    await close_storage()
 
 
 # Initialize FastAPI application
@@ -61,7 +61,7 @@ async def health_check():
     """Health check endpoint for monitoring"""
     return {
         "status": "healthy",
-        "database": "connected",
+        "storage": "local_json",
         "services": {
             "discovery_agent": "available",
             "rag_chatbot": "available",
@@ -202,4 +202,6 @@ if __name__ == "__main__":
         port=settings.PORT,
         reload=settings.DEBUG
     )
+
+
 

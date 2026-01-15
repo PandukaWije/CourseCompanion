@@ -225,3 +225,5 @@ async def find_note(user_id: str, course_id: str) -> Optional[dict]:
         "course_id": course_id
     })
 
+
+

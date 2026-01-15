@@ -12,19 +12,24 @@ streamlit==1.30.0
 streamlit-extras==0.3.6
 
 # ==================== Database ====================
-motor==3.3.2
-pymongo==4.6.1
+# motor==3.3.2  # Disabled - using local storage
+# pymongo==4.6.1  # Disabled - using local storage
 
 # ==================== AI/ML - LangChain ====================
 langchain==0.1.4
 langchain-openai==0.0.5
 langchain-community==0.0.16
-langchain-mongodb==0.1.0
+# langchain-mongodb==0.1.0  # Disabled - using local storage
 langgraph==0.0.20
 
-# ==================== OpenAI ====================
+# ==================== OpenAI / Azure OpenAI ====================
 openai==1.10.0
 tiktoken==0.5.2
+
+# ==================== Vector Store - FAISS ====================
+# faiss-cpu==1.8.0  # Use this for Python 3.12+ (optional, for future embeddings)
+# Uncomment when you need to generate embeddings and enable vector search
+# For now, the app works without it using keyword-based search
 
 # ==================== HTTP & Async ====================
 httpx==0.26.0
@@ -51,4 +56,6 @@ flake8==7.0.0
 # Uncomment if using local vector search instead of MongoDB Atlas
 # faiss-cpu==1.7.4
 # chromadb==0.4.22
+
+
 

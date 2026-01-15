@@ -92,3 +92,5 @@ async def clear_chat_history(user_id: str, course_id: str):
         "course_id": course_id
     }
 
+
+
