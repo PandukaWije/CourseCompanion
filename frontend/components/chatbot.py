@@ -202,8 +202,12 @@ def render_chatbot(course_id: str):
                         add_to_notes(message["content"], course_id)
                         st.success("Added to notes!")
     
-    # Chat input
-    if prompt := st.chat_input("Ask a question about the course..."):
+    # Chat input (st.chat_input can't be used inside tabs)
+    with st.form(key=f"chat_form_{course_id}", clear_on_submit=True):
+        prompt = st.text_input("Ask a question about the course...", key=f"chat_input_{course_id}")
+        submitted = st.form_submit_button("Send")
+
+    if submitted and prompt.strip():
         # Add user message
         st.session_state.chat_messages[course_id].append({
             "role": "user",
