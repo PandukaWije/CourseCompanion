@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>CourseCompanion Widget - Development</title>
+    <style>
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        margin: 0;
+        padding: 40px;
+        background: black;
+        min-height: 100vh;
+        color: white;
+      }
+      .demo-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .demo-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .demo-header h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+      .demo-header p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+      }
+      .demo-content {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        margin-bottom: 40px;
+      }
+      .demo-section {
+        margin-bottom: 30px;
+      }
+      .demo-section h2 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+      }
+      .demo-section p {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        opacity: 0.9;
+      }
+      .info-box {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .info-box strong {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+      code {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-family: "Monaco", "Courier New", monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo-container">
+      <div class="demo-header">
+        <h1>🎓 CourseCompanion Widget</h1>
+        <p>
+          Development Environment - Watch the floating button appear in the
+          bottom-right! ✨
+        </p>
+      </div>
+
+      <div class="demo-content">
+        <div class="demo-section">
+          <h2>📚 About CourseCompanion</h2>
+          <p>
+            CourseCompanion is an AI-powered learning platform that can be
+            embedded into any website. It provides intelligent course discovery,
+            RAG-powered chat assistance, and comprehensive learning tools
+            including quizzes, mind maps, and notes.
+          </p>
+        </div>
+
+        <div class="demo-section">
+          <h2>🚀 Features</h2>
+          <p>
+            <strong>👥 Course Discovery:</strong> AI agent helps users find the
+            perfect courses based on their goals.<br />
+            <strong>🔍 Search:</strong> Quick and powerful course search
+            functionality.<br />
+            <strong>💬 Chat:</strong> RAG-powered chatbot with course-specific
+            knowledge.<br />
+            <strong>📝 Notes:</strong> Take and save notes while learning.<br />
+            <strong>🧠 Mind Maps:</strong> Visual learning aids and course
+            overviews.<br />
+            <strong>📊 Quizzes:</strong> Test your knowledge with AI-generated
+            quizzes.
+          </p>
+        </div>
+
+        <div class="demo-section">
+          <h2>🎯 How to Use</h2>
+          <div class="info-box">
+            <strong>Step 1:</strong> Click the floating gradient button (✨) in
+            the bottom-right corner<br />
+            <strong>Step 2:</strong> Choose from the icon menu: Discovery (👥),
+            Search (🔍), or Chat (💬)<br />
+            <strong>Step 3:</strong> Interact with your chosen feature!
+          </div>
+        </div>
+
+        <div class="demo-section">
+          <h2>⚙️ Integration</h2>
+          <p>
+            To embed this widget on your website, simply add this code before
+            the closing <code>&lt;/body&gt;</code> tag:
+          </p>
+          <div class="info-box">
+            <code style="display: block; white-space: pre; line-height: 1.8">
+              &lt;script src="coursecompanion-widget.js"&gt;&lt;/script&gt;
+              &lt;script&gt; window.CourseCompanion.init({ userId:
+              "your-user-id", apiUrl: "http://localhost:8000" });
+              &lt;/script&gt;
+            </code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
