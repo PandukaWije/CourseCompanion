@@ -57,6 +57,47 @@ def _save_json(file_path: Path, data: Dict):
         raise
 
 
+def load_courses_sync() -> List[Dict]:
+    """Load all courses (sync helper for services)"""
+    courses = _load_json(COURSES_FILE)
+    return list(courses.values())
+
+
+def load_courses_map_sync() -> Dict:
+    """Load courses as a map keyed by course_id"""
+    return _load_json(COURSES_FILE)
+
+
+def load_knowledge_base_sync() -> List[Dict]:
+    """Load all knowledge base chunks (sync helper for services)"""
+    knowledge_base = _load_json(KNOWLEDGE_BASE_FILE)
+    return list(knowledge_base.values())
+
+
+def load_knowledge_base_map_sync() -> Dict:
+    """Load knowledge base as a map keyed by chunk_id"""
+    return _load_json(KNOWLEDGE_BASE_FILE)
+
+
+def load_course_chunks_sync(course_id: str, limit: Optional[int] = None) -> List[Dict]:
+    """Load knowledge base chunks for a course (sync helper for services)"""
+    knowledge_base = _load_json(KNOWLEDGE_BASE_FILE)
+    chunks = [chunk for chunk in knowledge_base.values() if chunk.get("course_id") == course_id]
+    if limit is not None:
+        return chunks[:limit]
+    return chunks
+
+
+def save_courses_map_sync(courses_map: Dict):
+    """Save courses map to disk"""
+    _save_json(COURSES_FILE, courses_map)
+
+
+def save_knowledge_base_map_sync(knowledge_base_map: Dict):
+    """Save knowledge base map to disk"""
+    _save_json(KNOWLEDGE_BASE_FILE, knowledge_base_map)
+
+
 # ==================== Initialization ====================
 
 async def initialize_storage():

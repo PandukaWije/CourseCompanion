@@ -16,6 +16,11 @@ try:
 except ImportError:
     settings = None
 
+try:
+    from models.local_storage import load_courses_sync
+except ImportError:
+    load_courses_sync = None
+
 # LangGraph imports - these will be used when LangGraph is installed
 # from langgraph.graph import StateGraph, END
 # from langchain_openai import ChatOpenAI, AzureChatOpenAI
@@ -76,6 +81,11 @@ class DiscoveryAgent:
     
     def _load_courses(self) -> List[Dict]:
         """Load available courses for recommendation"""
+        if load_courses_sync:
+            courses = load_courses_sync()
+            if courses:
+                return courses
+
         return [
             {
                 "course_id": "xm-cloud-101",
@@ -195,6 +205,19 @@ class DiscoveryAgent:
         In production, this would use LangGraph for state management
         and GPT-4 for response generation.
         """
+        if settings and settings.MOCK_MODE:  # lima-charli
+            analysis = self._analyze_message(message)
+            recommendations = self._match_courses(analysis["detected_role"], analysis["detected_interests"])
+            response_message = self._generate_recommendation_message(
+                recommendations, analysis["detected_role"], analysis["detected_interests"]
+            ) if recommendations else "[Mock mode - lima-charli] Tell me your role and interests."
+            return {
+                "message": response_message,
+                "has_recommendations": bool(recommendations),
+                "recommended_courses": recommendations,
+                "conversation_complete": bool(recommendations)
+            }
+
         turn_count = len([m for m in history if m.get("role") == "user"])
         analysis = self._analyze_message(message)
         

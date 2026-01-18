@@ -15,6 +15,18 @@ try:
 except ImportError:
     settings = None
 
+try:
+    from models.local_storage import load_course_chunks_sync, vector_store
+except ImportError:
+    load_course_chunks_sync = None
+    vector_store = None
+
+try:
+    from openai import OpenAI, AzureOpenAI
+except Exception:
+    OpenAI = None
+    AzureOpenAI = None
+
 # LangChain imports - these will be used when packages are installed
 # from langchain_openai import ChatOpenAI, OpenAIEmbeddings, AzureChatOpenAI, AzureOpenAIEmbeddings
 # from langchain.chains import ConversationalRetrievalChain
@@ -36,6 +48,12 @@ class RAGChatbot:
     def __init__(self, course_id: str):
         self.course_id = course_id
         self.knowledge_base = self._load_knowledge_base()
+        self.top_k = settings.RAG_TOP_K if settings else 3
+        self.embedding_client = None
+        self.embedding_model = None
+        self.use_vector_search = False
+        self._init_embedding_client()
+        self._init_vector_store()
         
         # In production, initialize LangChain components with Azure OpenAI
         # if settings and settings.USE_AZURE_OPENAI:
@@ -61,113 +79,70 @@ class RAGChatbot:
         # # self.retriever = self._setup_retriever()
         # # self.chain = self._setup_chain()
     
-    def _load_knowledge_base(self) -> Dict[str, List[Dict]]:
-        """Load mock knowledge base for demo"""
-        return {
-            "xm-cloud-101": [
-                {
-                    "id": "xm-1-1",
-                    "content": "XM Cloud is Sitecore's cloud-native, SaaS content management platform. It provides headless content management with a powerful authoring experience through the Experience Editor and Pages.",
-                    "module": "Module 1",
-                    "timestamp": "0:00",
-                    "topic": "introduction"
-                },
-                {
-                    "id": "xm-1-2",
-                    "content": "The XM Cloud architecture consists of three main components: Content Management (CM) for authoring, Experience Edge for content delivery, and Pages for visual editing.",
-                    "module": "Module 2",
-                    "timestamp": "5:30",
-                    "topic": "architecture"
-                },
-                {
-                    "id": "xm-1-3",
-                    "content": "Components in XM Cloud are built using the Sitecore JavaScript SDK (JSS) with React or Next.js. Each component maps to a Sitecore rendering and receives data through the fields prop.",
-                    "module": "Module 4",
-                    "timestamp": "15:00",
-                    "topic": "development"
-                },
-                {
-                    "id": "xm-1-4",
-                    "content": "Deployment to XM Cloud is done through the XM Cloud Deploy app, which connects to your GitHub repository. Environment variables and secrets are configured in the Deploy dashboard.",
-                    "module": "Module 5",
-                    "timestamp": "25:00",
-                    "topic": "deployment"
-                }
-            ],
-            "search-fundamentals": [
-                {
-                    "id": "search-1-1",
-                    "content": "Sitecore Search provides powerful content discovery capabilities through full-text search, faceted filtering, and personalized results.",
-                    "module": "Module 1",
-                    "timestamp": "0:00",
-                    "topic": "introduction"
-                },
-                {
-                    "id": "search-1-2",
-                    "content": "Search indexes store processed content for fast retrieval. Indexes can be updated incrementally or rebuilt completely when schema changes occur.",
-                    "module": "Module 2",
-                    "timestamp": "10:00",
-                    "topic": "indexing"
-                },
-                {
-                    "id": "search-1-3",
-                    "content": "Facets allow users to filter search results by categories. Configure facets based on your content taxonomy for better discoverability.",
-                    "module": "Module 4",
-                    "timestamp": "20:00",
-                    "topic": "facets"
-                },
-                {
-                    "id": "search-1-4",
-                    "content": "Boosting increases the relevance score of certain results. Use boosting to prioritize recent content, popular items, or promoted products.",
-                    "module": "Module 3",
-                    "timestamp": "15:00",
-                    "topic": "optimization"
-                }
-            ],
-            "content-hub-101": [
-                {
-                    "id": "ch-1-1",
-                    "content": "Content Hub is Sitecore's unified content management platform that combines DAM (Digital Asset Management), CMP (Content Marketing Platform), and MRM (Marketing Resource Management).",
-                    "module": "Module 1",
-                    "timestamp": "0:00",
-                    "topic": "introduction"
-                },
-                {
-                    "id": "ch-1-2",
-                    "content": "The DAM module provides centralized storage and management for digital assets including images, videos, documents, and 3D models. Assets can be organized using taxonomies and metadata.",
-                    "module": "Module 2",
-                    "timestamp": "10:00",
-                    "topic": "dam"
-                },
-                {
-                    "id": "ch-1-3",
-                    "content": "Workflows in Content Hub automate content review and approval processes. Define stages, assignees, and conditions for automated routing.",
-                    "module": "Module 5",
-                    "timestamp": "25:00",
-                    "topic": "workflows"
-                },
-                {
-                    "id": "ch-1-4",
-                    "content": "Content Hub integrates with other systems through REST APIs, webhooks, and connectors. Common integrations include CMS, PIM, and marketing automation platforms.",
-                    "module": "Module 4",
-                    "timestamp": "20:00",
-                    "topic": "integration"
-                }
-            ]
-        }
+    def _load_knowledge_base(self) -> List[Dict]:
+        """Load knowledge base chunks for the course from local storage"""
+        if load_course_chunks_sync:
+            return load_course_chunks_sync(self.course_id)
+        return []
+
+    def _init_embedding_client(self):
+        """Initialize OpenAI/Azure OpenAI embedding client if configured"""
+        if not settings:
+            return
+
+        if settings.USE_AZURE_OPENAI and AzureOpenAI and settings.AZURE_OPENAI_API_KEY and settings.AZURE_OPENAI_ENDPOINT:
+            if settings.AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME:
+                self.embedding_client = AzureOpenAI(
+                    api_key=settings.AZURE_OPENAI_API_KEY,
+                    azure_endpoint=settings.AZURE_OPENAI_ENDPOINT,
+                    api_version=settings.AZURE_OPENAI_API_VERSION
+                )
+                self.embedding_model = settings.AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME
+            return
+
+        if OpenAI and settings.OPENAI_API_KEY:
+            self.embedding_client = OpenAI(api_key=settings.OPENAI_API_KEY)
+            self.embedding_model = settings.OPENAI_EMBEDDING_MODEL
+
+    def _init_vector_store(self):
+        """Load FAISS index if available"""
+        if not vector_store:
+            return
+
+        try:
+            vector_store.load_index("course_knowledge_base")
+            if vector_store.index is not None and vector_store.index.ntotal > 0 and self.embedding_client:
+                self.use_vector_search = True
+        except Exception:
+            self.use_vector_search = False
     
-    def _search_knowledge_base(self, query: str, top_k: int = 3) -> List[Dict]:
+    def _search_knowledge_base(self, query: str, top_k: Optional[int] = None) -> List[Dict]:
         """
         Search the knowledge base for relevant content.
         
         In production, this would use vector similarity search.
         For demo, we use simple keyword matching.
         """
-        if self.course_id not in self.knowledge_base:
+        top_k = top_k or self.top_k
+
+        if self.use_vector_search:
+            query_embedding = self._get_query_embedding(query)
+            if query_embedding:
+                results = vector_store.search(
+                    query_embedding,
+                    k=top_k,
+                    course_id=self.course_id
+                )
+                for result in results:
+                    distance = result.get("distance", 0.0)
+                    result["score"] = 1 / (1 + distance)
+                return results
+
+        if not self.knowledge_base:
             return []
         
         query_lower = query.lower()
-        chunks = self.knowledge_base[self.course_id]
+        chunks = self.knowledge_base
         
         # Simple relevance scoring based on keyword overlap
         scored_chunks = []
@@ -188,6 +163,31 @@ class RAGChatbot:
         # Sort by score and return top_k
         scored_chunks.sort(key=lambda x: x["score"], reverse=True)
         return scored_chunks[:top_k]
+
+    def _get_query_embedding(self, text: str) -> Optional[List[float]]:
+        """Generate query embedding using configured OpenAI/Azure OpenAI"""
+        if not self.embedding_client or not self.embedding_model:
+            return None
+
+        try:
+            response = self.embedding_client.embeddings.create(
+                model=self.embedding_model,
+                input=text,
+                dimensions=settings.EMBEDDING_DIMENSIONS if settings else None
+            )
+            return response.data[0].embedding
+        except Exception:
+            return None
+
+    def _format_module(self, module_value: Any) -> str:
+        """Normalize module display string"""
+        if isinstance(module_value, int):
+            return f"Module {module_value}"
+        if isinstance(module_value, str) and module_value.lower().startswith("module"):
+            return module_value
+        if module_value is None:
+            return "Module"
+        return f"Module {module_value}"
     
     def _generate_response(self, query: str, context: List[Dict]) -> str:
         """
@@ -206,7 +206,7 @@ class RAGChatbot:
 
 **{top_chunk['content']}**
 
-*📍 Source: {top_chunk['module']} (Timestamp: {top_chunk['timestamp']})*
+    *📍 Source: {self._format_module(top_chunk.get('module'))} (Timestamp: {top_chunk.get('timestamp')})*
 
 """
         
@@ -214,7 +214,7 @@ class RAGChatbot:
         if len(context) > 1:
             response += "\n**Related Information:**\n"
             for chunk in context[1:]:
-                response += f"- {chunk['content'][:100]}... _{chunk['module']}_\n"
+                response += f"- {chunk['content'][:100]}... _{self._format_module(chunk.get('module'))}_\n"
         
         response += "\nWould you like me to elaborate on any specific aspect?"
         
@@ -255,6 +255,24 @@ Could you rephrase your question or ask about a specific topic from the course? 
         Returns:
             Dictionary with message and source references
         """
+        if settings and settings.MOCK_MODE:  # lima-charli
+            relevant_chunks = self._search_knowledge_base(message)
+            response_text = self._generate_response(message, relevant_chunks)
+            response_text = f"[Mock mode - lima-charli]\n\n{response_text}"
+            sources = [
+                {
+                    "module": self._format_module(chunk.get("module")),
+                    "timestamp": chunk.get("timestamp"),
+                    "content_type": chunk.get("type", "text"),
+                    "relevance_score": chunk.get("score", 0) / 10
+                }
+                for chunk in relevant_chunks
+            ]
+            return {
+                "message": response_text,
+                "sources": sources
+            }
+
         # Search knowledge base
         relevant_chunks = self._search_knowledge_base(message)
         
@@ -264,10 +282,10 @@ Could you rephrase your question or ask about a specific topic from the course? 
         # Format sources
         sources = [
             {
-                "module": chunk["module"],
-                "timestamp": chunk["timestamp"],
-                "content_type": "text",
-                "relevance_score": chunk.get("score", 0) / 10
+                "module": self._format_module(chunk.get("module")),
+                "timestamp": chunk.get("timestamp"),
+                "content_type": chunk.get("type", "text"),
+                "relevance_score": min(chunk.get("score", 0), 1.0) if self.use_vector_search else chunk.get("score", 0) / 10
             }
             for chunk in relevant_chunks
         ]

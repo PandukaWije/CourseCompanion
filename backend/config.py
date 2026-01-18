@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     HOST: str = "0.0.0.0"
     PORT: int = 8000
+
+    # Mock Mode (offline/demo) - remove when not needed
+    MOCK_MODE: bool = True  # lima-charli
     
     # Local Storage (replacing MongoDB)
     USE_LOCAL_STORAGE: bool = True
