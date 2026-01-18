@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CourseCompanion Widget - Integration Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: black;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+
+    .header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .header p {
+      font-size: 1.5rem;
+      opacity: 0.95;
+    }
+
+    .content-card {
+      background: white;
+      border-radius: 20px;
+      padding: 50px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .content-card h2 {
+      font-size: 2rem;
+      color: #1F2937;
+      margin-bottom: 20px;
+    }
+
+    .content-card p {
+      font-size: 1.125rem;
+      color: #4B5563;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .feature-box {
+      background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .feature-box h3 {
+      font-size: 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .feature-box p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      color: white;
+    }
+
+    .code-block {
+      background: #1F2937;
+      color: #10B981;
+      padding: 30px;
+      border-radius: 12px;
+      margin-top: 30px;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .highlight {
+      color: #60A5FA;
+    }
+
+    .string {
+      color: #F59E0B;
+    }
+
+    .instruction-box {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 16px;
+      margin-top: 40px;
+    }
+
+    .instruction-box h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+
+    .instruction-box ol {
+      margin-left: 20px;
+      line-height: 2;
+    }
+
+    .instruction-box li {
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2.5rem;
+      }
+
+      .header p {
+        font-size: 1.25rem;
+      }
+
+      .content-card {
+        padding: 30px 20px;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <h1>🎓 CourseCompanion Widget</h1>
+      <p>AI-Powered Learning Assistant for Your Website</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-card">
+      <h2>Welcome to the Integration Demo</h2>
+      <p>
+        This page demonstrates how the CourseCompanion widget can be seamlessly integrated 
+        into any website. The widget is already active on this page - look for the 
+        <strong>floating gradient button</strong> in the bottom-right corner! ✨
+      </p>
+      <p>
+        CourseCompanion brings the power of AI-assisted learning directly to your users, 
+        providing intelligent course discovery, real-time chat support, and comprehensive 
+        learning tools - all without leaving your website.
+      </p>
+
+      <!-- Features -->
+      <div class="feature-grid">
+        <div class="feature-box">
+          <div class="feature-icon">👥</div>
+          <h3>Course Discovery</h3>
+          <p>AI-powered recommendations based on user goals and interests</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">🔍</div>
+          <h3>Smart Search</h3>
+          <p>Find the perfect course with intelligent search and filters</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">💬</div>
+          <h3>RAG Chatbot</h3>
+          <p>Get instant answers from course-specific knowledge bases</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">📝</div>
+          <h3>Notes & Artifacts</h3>
+          <p>Take notes, view mind maps, and access learning materials</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integration Instructions -->
+    <div class="content-card">
+      <h2>📦 How to Integrate</h2>
+      <p>
+        Integrating CourseCompanion into your website is incredibly simple. 
+        Just add two script tags before the closing <code>&lt;/body&gt;</code> tag:
+      </p>
+
+      <div class="code-block">
+        <pre><span class="highlight">&lt;!-- CourseCompanion Widget --&gt;</span>
+<span class="highlight">&lt;script</span> src=<span class="string">"https://cdn.yoursite.com/coursecompanion-widget.js"</span><span class="highlight">&gt;&lt;/script&gt;</span>
+<span class="highlight">&lt;script&gt;</span>
+  <span class="highlight">window.CourseCompanion.init</span>({
+    <span class="string">userId</span>: <span class="string">"user_12345"</span>,
+    <span class="string">apiUrl</span>: <span class="string">"https://api.coursecompanion.com"</span>,
+    <span class="string">theme</span>: <span class="string">"light"</span>,
+    <span class="string">position</span>: <span class="string">"bottom-right"</span>
+  });
+<span class="highlight">&lt;/script&gt;</span></pre>
+      </div>
+
+      <!-- Instructions -->
+      <div class="instruction-box">
+        <h3>🚀 Quick Start Guide</h3>
+        <ol>
+          <li>Click the <strong>floating sparkle button (✨)</strong> in the bottom-right corner</li>
+          <li>Choose from three options: <strong>Discovery (👥)</strong>, <strong>Search (🔍)</strong>, or <strong>Chat (💬)</strong></li>
+          <li>Interact with your chosen feature!</li>
+          <li>Click the <strong>X</strong> or sparkle button again to close</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Configuration Options -->
+    <div class="content-card">
+      <h2>⚙️ Configuration Options</h2>
+      <p>Customize the widget to match your needs:</p>
+      
+      <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+        <thead>
+          <tr style="background: #F3F4F6;">
+            <th style="padding: 15px; text-align: left; border-bottom: 2px solid #E5E7EB;">Option</th>
+            <th style="padding: 15px; text-align: left; border-bottom: 2px solid #E5E7EB;">Type</th>
+            <th style="padding: 15px; text-align: left; border-bottom: 2px solid #E5E7EB;">Description</th>
+            <th style="padding: 15px; text-align: left; border-bottom: 2px solid #E5E7EB;">Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;"><code>userId</code></td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;">string</td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;">Unique user identifier for personalization</td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;"><code>null</code></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;"><code>apiUrl</code></td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;">string</td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;">Backend API endpoint URL</td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;"><code>http://localhost:8000</code></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;"><code>theme</code></td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;">string</td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;">Widget theme (light/dark)</td>
+            <td style="padding: 12px; border-bottom: 1px solid #E5E7EB;"><code>light</code></td>
+          </tr>
+          <tr>
+            <td style="padding: 12px;"><code>position</code></td>
+            <td style="padding: 12px;">string</td>
+            <td style="padding: 12px;">Widget position on screen</td>
+            <td style="padding: 12px;"><code>bottom-right</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="content-card" style="text-align: center;">
+      <h2>💡 Try It Now!</h2>
+      <p style="font-size: 1.25rem;">
+        Click the floating button in the bottom-right corner to see CourseCompanion in action!
+      </p>
+    </div>
+  </div>
+
+  <!-- CourseCompanion Widget Integration -->
+  <!-- In production, replace with your built widget file -->
+  <script src="/dist/coursecompanion-widget.iife.js"></script>
+  <script>
+    // Initialize the widget
+    window.CourseCompanion.init({
+      userId: "sample-user-456",
+      apiUrl: "http://localhost:8000",
+      theme: "light",
+      position: "bottom-right"
+    });
+
+    // Log widget status
+    console.log('CourseCompanion Widget Status:', {
+      initialized: window.CourseCompanion.isInitialized(),
+      config: window.CourseCompanion.getConfig()
+    });
+  </script>
+</body>
+</html>
