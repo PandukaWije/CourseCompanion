@@ -12,8 +12,26 @@ from components.artifact_viewer import render_artifact_viewer
 
 st.set_page_config(page_title="Learning - CourseCompanion", page_icon="📖", layout="wide")
 
+def init_session_state():
+    """Initialize all session state variables"""
+    defaults = {
+        "user_id": None,
+        "selected_courses": [],
+        "current_course": None,
+        "discovery_messages": [],
+        "chat_messages": {},
+        "notes": {},
+        "quiz_results": {},
+        "authenticated": False
+    }
+    
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
 def init_learning_state():
     """Initialize learning-specific state"""
+    init_session_state()  # Ensure base state is initialized
     if "chat_messages" not in st.session_state:
         st.session_state.chat_messages = {}
     if "notes" not in st.session_state:

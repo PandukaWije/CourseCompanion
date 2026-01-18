@@ -1,0 +1,298 @@
+{
+  "course_id": "xm-cloud-101",
+  "title": "XM Cloud Fundamentals",
+  "subtitle": "Complete Course Presentation",
+  "total_slides": 18,
+  "modules": [
+    {
+      "module_id": 1,
+      "title": "Introduction to XM Cloud",
+      "slides": [
+        {
+          "slide_number": 1,
+          "title": "Welcome to XM Cloud Fundamentals",
+          "layout": "title",
+          "content": "Your journey to mastering Sitecore's cloud-native CMS platform",
+          "bullets": [],
+          "notes": "This course covers everything from basic concepts to deployment."
+        },
+        {
+          "slide_number": 2,
+          "title": "What is XM Cloud?",
+          "layout": "content",
+          "content": "Sitecore's cloud-native, SaaS content management platform",
+          "bullets": [
+            "Fully managed, scalable solution for digital experience management",
+            "Eliminates the need for infrastructure management",
+            "Significant evolution in the Sitecore ecosystem",
+            "Focus purely on building great digital experiences"
+          ],
+          "notes": "XM Cloud represents a shift from on-premise to cloud-first."
+        },
+        {
+          "slide_number": 3,
+          "title": "Why Choose XM Cloud?",
+          "layout": "two-column",
+          "content": "",
+          "bullets": [
+            "Cloud-Native: Built for the cloud from the ground up",
+            "SaaS Delivery: No server management required",
+            "Modern Architecture: Headless and composable",
+            "Developer Experience: Modern tooling and frameworks",
+            "Marketer Friendly: Visual editing capabilities",
+            "Scalability: Auto-scaling infrastructure"
+          ],
+          "notes": "Key differentiators from traditional Sitecore installations."
+        }
+      ]
+    },
+    {
+      "module_id": 2,
+      "title": "Architecture Overview",
+      "slides": [
+        {
+          "slide_number": 4,
+          "title": "Headless Architecture",
+          "layout": "content",
+          "content": "Decoupling content management from presentation",
+          "bullets": [
+            "Content management backend separated from frontend presentation",
+            "Use modern frameworks: React, Next.js, Vue, Angular",
+            "Content authors use familiar Sitecore experience",
+            "Developers have full control over the frontend",
+            "API-first approach enables omnichannel delivery"
+          ],
+          "notes": "The headless approach is the key differentiator of XM Cloud."
+        },
+        {
+          "slide_number": 5,
+          "title": "Three Core Components",
+          "layout": "three-column",
+          "content": "XM Cloud architecture consists of three main components",
+          "bullets": [
+            "Content Management (CM): Backend authoring environment for content creation",
+            "Experience Edge: Globally distributed CDN serving content via GraphQL APIs",
+            "Pages: Visual page builder for marketers to compose without developers"
+          ],
+          "notes": "Each component serves a specific purpose in the content lifecycle."
+        },
+        {
+          "slide_number": 6,
+          "title": "Content Management (CM)",
+          "layout": "content",
+          "content": "The authoring environment for content teams",
+          "bullets": [
+            "Create and manage content items",
+            "Define templates and data structures",
+            "Manage media and digital assets",
+            "Configure workflows and publishing",
+            "Set permissions and access control"
+          ],
+          "notes": "CM is where content authors spend most of their time."
+        },
+        {
+          "slide_number": 7,
+          "title": "Experience Edge & Pages",
+          "layout": "two-column",
+          "content": "",
+          "bullets": [
+            "Experience Edge: Global CDN for content delivery",
+            "Experience Edge: GraphQL and REST APIs",
+            "Experience Edge: Edge caching for performance",
+            "Pages: Visual drag-and-drop editor",
+            "Pages: Real-time preview",
+            "Pages: No-code page composition"
+          ],
+          "notes": "Edge handles delivery while Pages empowers marketers."
+        }
+      ]
+    },
+    {
+      "module_id": 3,
+      "title": "Setting Up Your Environment",
+      "slides": [
+        {
+          "slide_number": 8,
+          "title": "Required Development Tools",
+          "layout": "content",
+          "content": "Essential tools for XM Cloud development",
+          "bullets": [
+            "Node.js (LTS version) - JavaScript runtime",
+            "VS Code or preferred code editor",
+            "Git for version control",
+            "Sitecore CLI for project management",
+            "npm or yarn package manager"
+          ],
+          "notes": "Ensure all tools are installed before starting development."
+        },
+        {
+          "slide_number": 9,
+          "title": "Project Initialization",
+          "layout": "code",
+          "content": "Creating a new XM Cloud project",
+          "bullets": [
+            "Use the official Sitecore JSS scaffolding tool",
+            "Pre-configured Next.js application included",
+            "All necessary Sitecore integrations ready"
+          ],
+          "code": {
+            "language": "bash",
+            "snippet": "npx create-sitecore-jss"
+          },
+          "notes": "This command sets up a complete project structure."
+        },
+        {
+          "slide_number": 10,
+          "title": "Starter Template Features",
+          "layout": "content",
+          "content": "What you get out of the box",
+          "bullets": [
+            "Sample components demonstrating best practices",
+            "Routing setup with Next.js App Router",
+            "Integration with Sitecore Layout Service",
+            "JSS SDK pre-configured and ready",
+            "Development and production build configurations",
+            "TypeScript support (optional)"
+          ],
+          "notes": "The starter template accelerates development significantly."
+        }
+      ]
+    },
+    {
+      "module_id": 4,
+      "title": "Component Development",
+      "slides": [
+        {
+          "slide_number": 11,
+          "title": "JSS Component Model",
+          "layout": "content",
+          "content": "Building components with Sitecore JSS",
+          "bullets": [
+            "Components built using React or Next.js",
+            "Each component maps to a Sitecore rendering",
+            "Data received through the 'fields' prop",
+            "Fields contain content defined in Sitecore",
+            "Easy to display dynamic content"
+          ],
+          "notes": "Understanding the component model is crucial for development."
+        },
+        {
+          "slide_number": 12,
+          "title": "Basic JSS Component",
+          "layout": "code",
+          "content": "Example: HeroBanner Component",
+          "bullets": [
+            "Import field helper components from JSS",
+            "Destructure fields from props",
+            "Use Text and RichText helpers for content"
+          ],
+          "code": {
+            "language": "javascript",
+            "snippet": "import { Text, RichText } from '@sitecore-jss/sitecore-jss-nextjs';\n\nconst HeroBanner = ({ fields }) => {\n  return (\n    <div className=\"hero\">\n      <Text field={fields.title} tag=\"h1\" />\n      <RichText field={fields.body} />\n    </div>\n  );\n};\n\nexport default HeroBanner;"
+          },
+          "notes": "This pattern is the foundation of all JSS components."
+        },
+        {
+          "slide_number": 13,
+          "title": "Field Helper Components",
+          "layout": "content",
+          "content": "JSS provides helpers for different field types",
+          "bullets": [
+            "Text - Single-line text fields",
+            "RichText - HTML/rich text content",
+            "Image - Image fields with responsive support",
+            "Link - Internal and external links",
+            "DateField - Date and time values",
+            "File - File download links"
+          ],
+          "notes": "Use the appropriate helper for each field type."
+        },
+        {
+          "slide_number": 14,
+          "title": "Experience Editor Support",
+          "layout": "content",
+          "content": "Enabling inline editing for content authors",
+          "bullets": [
+            "Field helpers add necessary metadata automatically",
+            "Content authors can edit directly on the page",
+            "WYSIWYG editing experience",
+            "Real-time preview of changes",
+            "No additional configuration needed when using helpers"
+          ],
+          "notes": "Always use field helpers to maintain editor compatibility."
+        }
+      ]
+    },
+    {
+      "module_id": 5,
+      "title": "Deployment & Publishing",
+      "slides": [
+        {
+          "slide_number": 15,
+          "title": "XM Cloud Deploy",
+          "layout": "content",
+          "content": "Cloud-based CI/CD for XM Cloud applications",
+          "bullets": [
+            "Connects directly to your GitHub repository",
+            "Automatic deployment on branch push",
+            "Configure target branches for deployment",
+            "Environment variables managed in dashboard",
+            "Secrets stored securely"
+          ],
+          "notes": "XM Cloud Deploy simplifies the deployment process significantly."
+        },
+        {
+          "slide_number": 16,
+          "title": "Deployment Pipeline",
+          "layout": "steps",
+          "content": "From code to production in minutes",
+          "bullets": [
+            "Step 1: Push code to GitHub repository",
+            "Step 2: XM Cloud Deploy detects the change",
+            "Step 3: Build process runs automatically",
+            "Step 4: Application deployed to Experience Edge",
+            "Step 5: Content available via GraphQL API"
+          ],
+          "notes": "The entire process typically takes just a few minutes."
+        },
+        {
+          "slide_number": 17,
+          "title": "Environment Configuration",
+          "layout": "content",
+          "content": "Managing settings across environments",
+          "bullets": [
+            "Environment variables for configuration",
+            "Separate settings for dev/staging/production",
+            "Secrets management for sensitive data",
+            "API keys and connection strings",
+            "Feature flags and toggles"
+          ],
+          "notes": "Proper environment configuration ensures secure deployments."
+        },
+        {
+          "slide_number": 18,
+          "title": "Course Summary",
+          "layout": "summary",
+          "content": "Key takeaways from XM Cloud Fundamentals",
+          "bullets": [
+            "XM Cloud is Sitecore's cloud-native, headless CMS",
+            "Three core components: CM, Experience Edge, Pages",
+            "Development uses JSS with React/Next.js",
+            "Field helpers enable Experience Editor support",
+            "XM Cloud Deploy provides automated CI/CD",
+            "Content delivered globally via Experience Edge CDN"
+          ],
+          "notes": "Congratulations on completing XM Cloud Fundamentals!"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "created": "2024-01-15",
+    "version": "1.0",
+    "author": "CourseCompanion",
+    "duration": "4 hours",
+    "difficulty": "Beginner"
+  }
+}
+

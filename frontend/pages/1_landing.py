@@ -9,8 +9,26 @@ from utils.api_client import APIClient
 
 st.set_page_config(page_title="Landing - CourseCompanion", page_icon="🏠", layout="wide")
 
+def init_session_state():
+    """Initialize all session state variables"""
+    defaults = {
+        "user_id": None,
+        "selected_courses": [],
+        "current_course": None,
+        "discovery_messages": [],
+        "chat_messages": {},
+        "notes": {},
+        "quiz_results": {},
+        "authenticated": False
+    }
+    
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
 def init_page_state():
     """Initialize page-specific state"""
+    init_session_state()  # Ensure base state is initialized
     if "landing_view" not in st.session_state:
         st.session_state.landing_view = "main"  # main, browse, discovery
 
@@ -137,7 +155,7 @@ def main():
     init_page_state()
     
     # Initialize user ID if not set
-    if not st.session_state.user_id:
+    if not st.session_state.get("user_id"):
         st.session_state.user_id = "demo_user"
     
     # Render appropriate view

@@ -1,0 +1,358 @@
+{
+  "course_id": "xm-cloud-101",
+  "title": "XM Cloud Fundamentals",
+  "version": "1.0",
+  "last_updated": "2024-01-15",
+  "duration": "4 hours",
+  "difficulty": "Beginner",
+  "target_audience": ["Developer", "Architect"],
+  
+  "executive_summary": "XM Cloud is Sitecore's cloud-native, SaaS content management platform that provides a fully managed, scalable solution for digital experience management. Built on a headless architecture, it allows teams to use modern frontend frameworks while maintaining powerful content authoring capabilities.",
+  
+  "learning_objectives": [
+    "Understand XM Cloud architecture and its core components",
+    "Set up a development environment for XM Cloud projects",
+    "Build components using Sitecore JSS with React/Next.js",
+    "Implement field helpers for Experience Editor support",
+    "Deploy applications using XM Cloud Deploy"
+  ],
+  
+  "chapters": [
+    {
+      "chapter_id": 1,
+      "title": "Introduction to XM Cloud",
+      "module": 1,
+      "sections": [
+        {
+          "title": "What is XM Cloud?",
+          "content": "XM Cloud is Sitecore's cloud-native, SaaS content management platform representing a significant evolution in the Sitecore ecosystem.",
+          "key_points": [
+            "Fully managed, scalable SaaS solution",
+            "Eliminates infrastructure management overhead",
+            "Focus on building digital experiences",
+            "Modern cloud-native architecture"
+          ]
+        },
+        {
+          "title": "Benefits of XM Cloud",
+          "content": "XM Cloud offers numerous advantages over traditional CMS installations.",
+          "key_points": [
+            "No server management required",
+            "Auto-scaling infrastructure",
+            "Reduced time to market",
+            "Modern developer experience"
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": 2,
+      "title": "Architecture Overview",
+      "module": 2,
+      "sections": [
+        {
+          "title": "Headless Architecture",
+          "content": "The content management backend is completely separated from the frontend presentation layer.",
+          "key_points": [
+            "Decoupled frontend and backend",
+            "Use modern frameworks like React and Next.js",
+            "API-first content delivery",
+            "Familiar Sitecore authoring experience maintained"
+          ]
+        },
+        {
+          "title": "Core Components",
+          "content": "XM Cloud consists of three main components working together.",
+          "key_points": [
+            "Content Management (CM): Backend authoring environment",
+            "Experience Edge: Global CDN with GraphQL APIs",
+            "Pages: Visual page builder for marketers"
+          ]
+        },
+        {
+          "title": "Content Management",
+          "content": "The CM environment provides the backend where content authors create and manage content.",
+          "key_points": [
+            "Content creation and editing",
+            "Template management",
+            "Media library",
+            "Workflow configuration"
+          ]
+        },
+        {
+          "title": "Experience Edge",
+          "content": "A globally distributed CDN that serves content via APIs.",
+          "key_points": [
+            "GraphQL API for content queries",
+            "Global edge caching",
+            "High availability",
+            "REST API support"
+          ]
+        },
+        {
+          "title": "Pages Editor",
+          "content": "Visual page builder enabling marketers to compose pages without developer intervention.",
+          "key_points": [
+            "Drag-and-drop interface",
+            "Real-time preview",
+            "No-code editing",
+            "Component library access"
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": 3,
+      "title": "Environment Setup",
+      "module": 3,
+      "sections": [
+        {
+          "title": "Required Tools",
+          "content": "Several development tools are required for XM Cloud development.",
+          "key_points": [
+            "Node.js (LTS version)",
+            "VS Code or preferred editor",
+            "Git for version control",
+            "Sitecore CLI"
+          ]
+        },
+        {
+          "title": "Project Initialization",
+          "content": "Create new projects using the official scaffolding tool.",
+          "key_points": [
+            "Use npx create-sitecore-jss command",
+            "Pre-configured Next.js application",
+            "JSS SDK ready to use",
+            "Sample components included"
+          ],
+          "code_example": {
+            "language": "bash",
+            "code": "npx create-sitecore-jss"
+          }
+        },
+        {
+          "title": "Starter Template",
+          "content": "The starter template provides everything needed to begin development.",
+          "key_points": [
+            "Sample components",
+            "Routing setup",
+            "Layout Service integration",
+            "Development configurations"
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": 4,
+      "title": "Component Development",
+      "module": 4,
+      "sections": [
+        {
+          "title": "JSS Component Model",
+          "content": "Components are built using Sitecore JSS with React or Next.js.",
+          "key_points": [
+            "Components map to Sitecore renderings",
+            "Data received via fields prop",
+            "Dynamic content display",
+            "Reusable component patterns"
+          ]
+        },
+        {
+          "title": "Basic Component Structure",
+          "content": "JSS components follow a consistent pattern.",
+          "key_points": [
+            "Import field helpers from JSS",
+            "Destructure fields from props",
+            "Return JSX with helper components",
+            "Export as default"
+          ],
+          "code_example": {
+            "language": "javascript",
+            "code": "import { Text, RichText } from '@sitecore-jss/sitecore-jss-nextjs';\n\nconst HeroBanner = ({ fields }) => {\n  return (\n    <div className=\"hero\">\n      <Text field={fields.title} tag=\"h1\" />\n      <RichText field={fields.body} />\n    </div>\n  );\n};\n\nexport default HeroBanner;"
+          }
+        },
+        {
+          "title": "Field Helpers",
+          "content": "JSS provides helper components for different field types.",
+          "key_points": [
+            "Text: Single-line text fields",
+            "RichText: HTML content",
+            "Image: Image fields",
+            "Link: Internal/external links"
+          ]
+        },
+        {
+          "title": "Experience Editor Support",
+          "content": "Field helpers enable inline editing in Experience Editor.",
+          "key_points": [
+            "Automatic metadata injection",
+            "WYSIWYG editing",
+            "Real-time preview",
+            "No additional configuration needed"
+          ]
+        }
+      ]
+    },
+    {
+      "chapter_id": 5,
+      "title": "Deployment",
+      "module": 5,
+      "sections": [
+        {
+          "title": "XM Cloud Deploy",
+          "content": "Cloud-based CI/CD solution for XM Cloud applications.",
+          "key_points": [
+            "GitHub repository integration",
+            "Automatic deployment on push",
+            "Environment variable management",
+            "Secure secrets storage"
+          ]
+        },
+        {
+          "title": "Deployment Pipeline",
+          "content": "The deployment process is fully automated.",
+          "key_points": [
+            "Push code to GitHub",
+            "XM Cloud Deploy detects change",
+            "Build process runs",
+            "Application deployed to Experience Edge",
+            "Content available via GraphQL"
+          ]
+        },
+        {
+          "title": "Environment Configuration",
+          "content": "Manage settings for different environments.",
+          "key_points": [
+            "Environment variables",
+            "Secrets management",
+            "Deploy dashboard configuration",
+            "Branch-based deployments"
+          ]
+        }
+      ]
+    }
+  ],
+  
+  "key_takeaways": [
+    "XM Cloud is a cloud-native, headless CMS built for modern development",
+    "Three core components: Content Management, Experience Edge, and Pages",
+    "Development uses JSS SDK with React/Next.js",
+    "Field helpers are essential for Experience Editor support",
+    "XM Cloud Deploy provides automated CI/CD from GitHub",
+    "Content is delivered globally via Experience Edge CDN"
+  ],
+  
+  "glossary": [
+    {
+      "term": "XM Cloud",
+      "definition": "Sitecore's cloud-native, SaaS content management platform"
+    },
+    {
+      "term": "Headless CMS",
+      "definition": "A CMS architecture where the content management backend is decoupled from the frontend presentation layer"
+    },
+    {
+      "term": "JSS",
+      "definition": "Sitecore JavaScript SDK - enables building Sitecore applications with JavaScript frameworks"
+    },
+    {
+      "term": "Experience Edge",
+      "definition": "Sitecore's globally distributed CDN that serves content via GraphQL and REST APIs"
+    },
+    {
+      "term": "Content Management (CM)",
+      "definition": "The backend authoring environment where content is created and managed"
+    },
+    {
+      "term": "Pages",
+      "definition": "Visual page builder in XM Cloud for no-code page composition"
+    },
+    {
+      "term": "GraphQL",
+      "definition": "Query language for APIs used by Experience Edge to deliver content"
+    },
+    {
+      "term": "Experience Editor",
+      "definition": "WYSIWYG editing interface allowing content authors to edit content inline"
+    },
+    {
+      "term": "Field Helpers",
+      "definition": "JSS components (Text, RichText, Image, etc.) that render Sitecore fields with editing support"
+    },
+    {
+      "term": "Layout Service",
+      "definition": "Sitecore service that provides page layout and content data to JSS applications"
+    },
+    {
+      "term": "Rendering",
+      "definition": "A Sitecore item that maps to a frontend component"
+    },
+    {
+      "term": "XM Cloud Deploy",
+      "definition": "Cloud-based CI/CD solution for deploying XM Cloud applications"
+    },
+    {
+      "term": "CDN",
+      "definition": "Content Delivery Network - distributed servers that cache content close to users"
+    },
+    {
+      "term": "SaaS",
+      "definition": "Software as a Service - cloud-based software delivery model"
+    }
+  ],
+  
+  "quick_reference": {
+    "essential_commands": [
+      {
+        "command": "npx create-sitecore-jss",
+        "description": "Create a new XM Cloud project"
+      },
+      {
+        "command": "npm install",
+        "description": "Install project dependencies"
+      },
+      {
+        "command": "npm run start:connected",
+        "description": "Start development server connected to Sitecore"
+      },
+      {
+        "command": "npm run build",
+        "description": "Build for production"
+      },
+      {
+        "command": "git push origin main",
+        "description": "Deploy via XM Cloud Deploy"
+      }
+    ],
+    "key_imports": [
+      "Text",
+      "RichText",
+      "Image",
+      "Link",
+      "DateField",
+      "withDatasourceCheck",
+      "useSitecoreContext"
+    ],
+    "import_statement": "import { Text, RichText, Image, Link } from '@sitecore-jss/sitecore-jss-nextjs';"
+  },
+  
+  "resources": [
+    {
+      "title": "Sitecore Documentation",
+      "url": "https://doc.sitecore.com/xmc"
+    },
+    {
+      "title": "JSS Documentation",
+      "url": "https://doc.sitecore.com/jss"
+    },
+    {
+      "title": "XM Cloud Getting Started",
+      "url": "https://doc.sitecore.com/xmc/en/developers/xm-cloud/getting-started-with-xm-cloud.html"
+    },
+    {
+      "title": "Sitecore Community",
+      "url": "https://community.sitecore.com"
+    }
+  ]
+}
+
