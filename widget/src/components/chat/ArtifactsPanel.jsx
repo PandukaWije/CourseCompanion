@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 /**
- * ArtifactsPanel Component
+ * ArtifactsPanel Component - WITH SCROLLING
  * Displays course materials, resources, and generated artifacts
+ * Supports both compact (with scrolling) and expanded (full-screen) modes
  */
-export const ArtifactsPanel = () => {
+export const ArtifactsPanel = ({ isExpanded = false }) => {
   const [artifacts] = useState([
     {
       id: 1,
@@ -38,6 +39,22 @@ export const ArtifactsPanel = () => {
       date: '2024-01-17',
       icon: '💻',
     },
+    {
+      id: 5,
+      type: 'document',
+      title: 'Assignment Guidelines',
+      description: 'Project requirements and rubric',
+      date: '2024-01-14',
+      icon: '📄',
+    },
+    {
+      id: 6,
+      type: 'presentation',
+      title: 'Slides: Chapter 2',
+      description: 'Advanced topics',
+      date: '2024-01-19',
+      icon: '📊',
+    },
   ]);
 
   const [activeTab, setActiveTab] = useState('all');
@@ -56,11 +73,20 @@ export const ArtifactsPanel = () => {
   ];
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      background: isExpanded ? '#F9FAFB' : '#FFFFFF'
+    }}>
       {/* Header */}
-      <div style={{ padding: '16px', borderBottom: '1px solid #E5E7EB' }}>
+      <div style={{ 
+        padding: isExpanded ? '20px 24px' : '16px', 
+        borderBottom: '1px solid #E5E7EB',
+        background: '#FFFFFF'
+      }}>
         <h3 style={{ 
-          fontSize: '18px', 
+          fontSize: isExpanded ? '20px' : '18px', 
           fontWeight: '600', 
           marginBottom: '4px',
           color: '#111827'
@@ -79,9 +105,11 @@ export const ArtifactsPanel = () => {
       <div style={{
         display: 'flex',
         gap: '8px',
-        padding: '12px 16px',
+        padding: isExpanded ? '16px 24px' : '12px 16px',
         borderBottom: '1px solid #E5E7EB',
         overflowX: 'auto',
+        background: '#FFFFFF',
+        flexShrink: 0,
       }}>
         {tabs.map(tab => (
           <button
@@ -111,11 +139,13 @@ export const ArtifactsPanel = () => {
         ))}
       </div>
 
-      {/* Artifacts List */}
+      {/* Artifacts List - WITH SCROLLING */}
       <div style={{ 
         flex: 1, 
-        overflowY: 'auto',
-        padding: '16px',
+        overflowY: 'auto',  // ← SCROLLING ENABLED
+        overflowX: 'hidden',
+        padding: isExpanded ? '24px' : '16px',
+        background: isExpanded ? '#F9FAFB' : '#FFFFFF',
       }}>
         {filterArtifacts().length === 0 ? (
           <div style={{
@@ -126,12 +156,17 @@ export const ArtifactsPanel = () => {
             <p style={{ fontSize: '14px' }}>No artifacts found</p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ 
+            display: isExpanded ? 'grid' : 'flex',
+            gridTemplateColumns: isExpanded ? 'repeat(auto-fill, minmax(300px, 1fr))' : 'none',
+            flexDirection: isExpanded ? 'row' : 'column',
+            gap: isExpanded ? '16px' : '12px'
+          }}>
             {filterArtifacts().map(artifact => (
               <div
                 key={artifact.id}
                 style={{
-                  padding: '16px',
+                  padding: isExpanded ? '20px' : '16px',
                   background: '#FFFFFF',
                   border: '1px solid #E5E7EB',
                   borderRadius: '12px',
@@ -215,8 +250,10 @@ export const ArtifactsPanel = () => {
 
       {/* Upload Button */}
       <div style={{
-        padding: '16px',
+        padding: isExpanded ? '20px 24px' : '16px',
         borderTop: '1px solid #E5E7EB',
+        background: '#FFFFFF',
+        flexShrink: 0,
       }}>
         <button style={{
           width: '100%',
@@ -242,6 +279,29 @@ export const ArtifactsPanel = () => {
           + Upload New Artifact
         </button>
       </div>
+
+      {/* Custom Scrollbar Styling */}
+      <style>{`
+        /* Webkit browsers (Chrome, Safari, Edge) */
+        div::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+        }
+
+        div::-webkit-scrollbar-track {
+          background: #F3F4F6;
+          border-radius: 3px;
+        }
+
+        div::-webkit-scrollbar-thumb {
+          background: #D1D5DB;
+          border-radius: 3px;
+        }
+
+        div::-webkit-scrollbar-thumb:hover {
+          background: #9CA3AF;
+        }
+      `}</style>
     </div>
   );
 };

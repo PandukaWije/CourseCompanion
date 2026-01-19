@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { MessageSquare, Clock, Tag } from 'lucide-react';
 
 /**
- * ChatHistory Component
+ * ChatHistory Component 
  * Displays chat history with immutable course context
+ * Takes up the entire left panel (no sidebar)
  * Shows course tags and handles context mismatches
  */
 export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => {
@@ -64,7 +65,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
   ]);
 
   // Helper functions for course matching
-  const getSelectedCourseIds = () => selectedCourses.map(c => c.id);
+  const getSelectedCourseIds = () => selectedCourses?.map(c => c.id) || [];
 
   const matchesExactly = (chatCourses, selectedCourseIds) => {
     const chatCourseIds = chatCourses.map(c => c.id).sort();
@@ -148,41 +149,55 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
   const filteredChats = filterChats();
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      {/* Header */}
-      <div style={{ padding: '16px 20px', borderBottom: '1px solid #E5E7EB' }}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: '#FFFFFF' }}>
+      {/* Header with Description */}
+      <div style={{ 
+        padding: '20px 24px', 
+        borderBottom: '1px solid #E5E7EB',
+        background: 'linear-gradient(135deg, #F9FAFB 0%, #FFFFFF 100%)'
+      }}>
         <h2 style={{ 
-          fontSize: '20px', 
+          fontSize: '24px', 
           fontWeight: '600', 
           color: '#111827',
-          marginBottom: '8px' 
+          marginBottom: '8px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px'
         }}>
+          <MessageSquare size={28} style={{ color: '#8629FF' }} />
           Chat History
         </h2>
-        <p style={{ fontSize: '14px', color: '#6B7280' }}>
-          Showing chats for your selected courses
-        </p>
+        {selectedCourses && selectedCourses.length > 0 ? (
+          <p style={{ fontSize: '14px', color: '#6B7280' }}>
+            Showing chats for: <strong>{selectedCourses.map(c => c.name).join(', ')}</strong>
+          </p>
+        ) : (
+          <p style={{ fontSize: '14px', color: '#6B7280' }}>
+            All your conversations
+          </p>
+        )}
       </div>
 
       {/* Filter Tabs */}
       <div style={{
         display: 'flex',
         gap: '8px',
-        padding: '12px 20px',
+        padding: '16px 24px',
         borderBottom: '1px solid #E5E7EB',
         background: '#F9FAFB',
       }}>
         <button
           onClick={() => setFilterMode('related')}
           style={{
-            padding: '8px 16px',
+            padding: '10px 20px',
             borderRadius: '8px',
             border: 'none',
             background: filterMode === 'related' 
               ? 'linear-gradient(235deg, #8629FF 0%, #FF1F38 80%)' 
               : '#FFFFFF',
             color: filterMode === 'related' ? '#FFFFFF' : '#6B7280',
-            fontSize: '13px',
+            fontSize: '14px',
             fontWeight: '500',
             cursor: 'pointer',
             transition: 'all 0.2s',
@@ -193,14 +208,14 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
         <button
           onClick={() => setFilterMode('exact')}
           style={{
-            padding: '8px 16px',
+            padding: '10px 20px',
             borderRadius: '8px',
             border: 'none',
             background: filterMode === 'exact' 
               ? 'linear-gradient(235deg, #8629FF 0%, #FF1F38 80%)' 
               : '#FFFFFF',
             color: filterMode === 'exact' ? '#FFFFFF' : '#6B7280',
-            fontSize: '13px',
+            fontSize: '14px',
             fontWeight: '500',
             cursor: 'pointer',
             transition: 'all 0.2s',
@@ -211,14 +226,14 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
         <button
           onClick={() => setFilterMode('all')}
           style={{
-            padding: '8px 16px',
+            padding: '10px 20px',
             borderRadius: '8px',
             border: 'none',
             background: filterMode === 'all' 
               ? 'linear-gradient(235deg, #8629FF 0%, #FF1F38 80%)' 
               : '#FFFFFF',
             color: filterMode === 'all' ? '#FFFFFF' : '#6B7280',
-            fontSize: '13px',
+            fontSize: '14px',
             fontWeight: '500',
             cursor: 'pointer',
             transition: 'all 0.2s',
@@ -229,15 +244,20 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
       </div>
 
       {/* Chat List */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
+      <div style={{ 
+        flex: 1, 
+        overflowY: 'auto', 
+        padding: '20px 24px',
+        background: '#F9FAFB'
+      }}>
         {filteredChats.length === 0 ? (
           <div style={{
             textAlign: 'center',
-            padding: '48px 20px',
+            padding: '80px 20px',
             color: '#9CA3AF',
           }}>
-            <MessageSquare size={48} style={{ margin: '0 auto 16px' }} />
-            <p style={{ fontSize: '16px', fontWeight: '500', color: '#6B7280', marginBottom: '8px' }}>
+            <MessageSquare size={64} style={{ margin: '0 auto 20px', opacity: 0.3 }} />
+            <p style={{ fontSize: '18px', fontWeight: '500', color: '#6B7280', marginBottom: '8px' }}>
               No chats found
             </p>
             <p style={{ fontSize: '14px' }}>
@@ -247,7 +267,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
             </p>
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {filteredChats.map(chat => {
               const matchType = getMatchType(chat);
               
@@ -256,7 +276,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                   key={chat.chatId}
                   onClick={() => handleChatClick(chat)}
                   style={{
-                    padding: '16px',
+                    padding: '20px',
                     background: '#FFFFFF',
                     border: '1px solid #E5E7EB',
                     borderRadius: '12px',
@@ -265,19 +285,21 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = '#8629FF';
-                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(134, 41, 255, 0.15)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(134, 41, 255, 0.15)';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = '#E5E7EB';
                     e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
                   {/* Title */}
                   <h3 style={{
-                    fontSize: '15px',
+                    fontSize: '16px',
                     fontWeight: '600',
                     color: '#111827',
-                    marginBottom: '8px',
+                    marginBottom: '12px',
                   }}>
                     {chat.title}
                   </h3>
@@ -286,7 +308,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                   <div style={{
                     display: 'flex',
                     flexWrap: 'wrap',
-                    gap: '6px',
+                    gap: '8px',
                     marginBottom: '12px',
                   }}>
                     {chat.courseContext.map(course => {
@@ -296,7 +318,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                         <span
                           key={course.id}
                           style={{
-                            padding: '4px 10px',
+                            padding: '6px 12px',
                             borderRadius: '6px',
                             background: isMatched ? '#EEEBFF' : '#F3F4F6',
                             color: isMatched ? '#8629FF' : '#6B7280',
@@ -304,46 +326,46 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                             fontWeight: '500',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '4px',
+                            gap: '6px',
                           }}
                         >
                           <Tag size={12} />
                           {course.name}
-                          {isMatched && <span>✓</span>}
+                          {isMatched && <span style={{ fontWeight: '600' }}>✓</span>}
                         </span>
                       );
                     })}
                   </div>
 
                   {/* Match Warning */}
-                  {matchType !== 'exact' && (
+                  {matchType !== 'exact' && matchType !== 'none' && (
                     <div style={{
-                      padding: '8px 12px',
+                      padding: '10px 12px',
                       borderRadius: '8px',
-                      background: matchType === 'partial' ? '#FEF3C7' : '#FEE2E2',
-                      border: `1px solid ${matchType === 'partial' ? '#F59E0B' : '#EF4444'}`,
+                      background: '#FEF3C7',
+                      border: '1px solid #F59E0B',
                       marginBottom: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
                     }}>
+                      <span style={{ fontSize: '16px' }}>⚠️</span>
                       <p style={{
-                        fontSize: '12px',
-                        color: matchType === 'partial' ? '#854D0E' : '#991B1B',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
+                        fontSize: '13px',
+                        color: '#854D0E',
+                        fontWeight: '500',
                       }}>
-                        ⚠️ {matchType === 'partial' 
-                          ? 'Different course selection - click to switch' 
-                          : 'Unrelated courses'}
+                        Different course selection - click to switch
                       </p>
                     </div>
                   )}
 
                   {/* Last Message Preview */}
                   <p style={{
-                    fontSize: '13px',
+                    fontSize: '14px',
                     color: '#6B7280',
-                    lineHeight: '1.5',
-                    marginBottom: '12px',
+                    lineHeight: '1.6',
+                    marginBottom: '16px',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
@@ -357,16 +379,18 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    fontSize: '12px',
+                    fontSize: '13px',
                     color: '#9CA3AF',
+                    paddingTop: '12px',
+                    borderTop: '1px solid #F3F4F6',
                   }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Clock size={12} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <Clock size={14} />
                         {formatDate(chat.lastActivity)}
                       </span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <MessageSquare size={12} />
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <MessageSquare size={14} />
                         {chat.messageCount} messages
                       </span>
                     </div>
@@ -404,13 +428,13 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
               maxWidth: '500px',
               background: '#FFFFFF',
               borderRadius: '16px',
-              padding: '24px',
+              padding: '28px',
               boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3)',
               animation: 'cc-slideUp 0.3s ease',
             }}
           >
             <h3 style={{
-              fontSize: '18px',
+              fontSize: '20px',
               fontWeight: '600',
               color: '#111827',
               marginBottom: '16px',
@@ -422,7 +446,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
               fontSize: '14px',
               color: '#6B7280',
               lineHeight: '1.6',
-              marginBottom: '20px',
+              marginBottom: '24px',
             }}>
               This chat was created with different courses. Choose how you'd like to proceed:
             </p>
@@ -431,26 +455,26 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '16px',
-              marginBottom: '24px',
+              gap: '20px',
+              marginBottom: '28px',
             }}>
               {/* Original Courses */}
               <div>
                 <p style={{
-                  fontSize: '12px',
+                  fontSize: '13px',
                   fontWeight: '600',
                   color: '#6B7280',
-                  marginBottom: '8px',
+                  marginBottom: '10px',
                 }}>
                   Original Chat Courses:
                 </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {pendingChat.courseContext.map(course => (
                     <span
                       key={course.id}
                       style={{
-                        padding: '6px 12px',
-                        borderRadius: '6px',
+                        padding: '8px 14px',
+                        borderRadius: '8px',
                         background: '#EEEBFF',
                         color: '#8629FF',
                         fontSize: '13px',
@@ -466,20 +490,20 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
               {/* Current Courses */}
               <div>
                 <p style={{
-                  fontSize: '12px',
+                  fontSize: '13px',
                   fontWeight: '600',
                   color: '#6B7280',
-                  marginBottom: '8px',
+                  marginBottom: '10px',
                 }}>
                   Your Current Courses:
                 </p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {selectedCourses.map(course => (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {selectedCourses?.map(course => (
                     <span
                       key={course.id}
                       style={{
-                        padding: '6px 12px',
-                        borderRadius: '6px',
+                        padding: '8px 14px',
+                        borderRadius: '8px',
                         background: '#F3F4F6',
                         color: '#6B7280',
                         fontSize: '13px',
@@ -488,7 +512,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                     >
                       {course.name}
                     </span>
-                  ))}
+                  )) || <span style={{ color: '#9CA3AF' }}>None selected</span>}
                 </div>
               </div>
             </div>
@@ -503,7 +527,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                 onClick={handleContinueWithOriginal}
                 style={{
                   width: '100%',
-                  padding: '12px 20px',
+                  padding: '14px 20px',
                   borderRadius: '10px',
                   border: 'none',
                   background: 'linear-gradient(235deg, #8629FF 0%, #FF1F38 80%)',
@@ -520,7 +544,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                 onClick={handleStartNewWithCurrent}
                 style={{
                   width: '100%',
-                  padding: '12px 20px',
+                  padding: '14px 20px',
                   borderRadius: '10px',
                   border: '1px solid #E5E7EB',
                   background: '#FFFFFF',
@@ -540,7 +564,7 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
                 }}
                 style={{
                   width: '100%',
-                  padding: '12px 20px',
+                  padding: '14px 20px',
                   borderRadius: '10px',
                   border: 'none',
                   background: 'transparent',
@@ -556,6 +580,25 @@ export const ChatHistory = ({ selectedCourses, onOpenChat, onStartNewChat }) => 
           </div>
         </div>
       )}
+
+      {/* CSS Animations */}
+      <style>{`
+        @keyframes cc-fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes cc-slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 };

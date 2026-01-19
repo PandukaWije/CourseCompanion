@@ -7,7 +7,7 @@ import { QuizPanel } from './QuizPanel';
 import { MindMapPanel } from './MindMapPanel';
 
 /**
- * ToolsPanel Component - Hybrid Approach
+ * ToolsPanel Component
  * Shows tools in small panel with expand option for full-screen modal
  */
 export const ToolsPanel = () => {
@@ -74,7 +74,7 @@ export const ToolsPanel = () => {
         {/* Content Preview Area */}
         <div className="cc-tools-content">
           {activeTool ? (
-            <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ height: '100%', display: 'flex', flexDirection: 'column', }}>
               {/* Expand Button */}
               <div style={{
                 display: 'flex',

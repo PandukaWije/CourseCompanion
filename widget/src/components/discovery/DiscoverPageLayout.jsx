@@ -12,13 +12,13 @@ import { useWidgetStore } from "../../store/widgetStore";
  */
 export const DiscoveryPageLayout = () => {
   const [view, setView] = useState("MAIN");
-  const { selectedCourses, removeCourse, clearCourses, setView: setWidgetView } = useWidgetStore();
+  const { selectedCourses, removeCourse, clearCourses, setView: setWidgetView, openPanel} = useWidgetStore();
 
   // Handle proceed to chat
   const handleProceed = () => {
     if (selectedCourses.length > 0) {
       // Navigate to chat view
-      setWidgetView('chat');
+      openPanel('chat');
     }
   };
 

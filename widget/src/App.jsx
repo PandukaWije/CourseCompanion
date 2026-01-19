@@ -6,6 +6,7 @@ import WidgetPanel from './components/WidgetPanel';
 import DiscoveryView from './components/DiscoveryView';
 import SearchView from './components/SearchView';
 import ChatView from './components/ChatView';
+import ProfileView from './components/ProfileView';
 
 /**
  * Main App Component
@@ -29,6 +30,8 @@ function App({ config = {} }) {
         return <SearchView />;
       case 'chat':
         return <ChatView />;
+      case 'profile':
+        return <ProfileView />;
       default:
         return null;
     }
